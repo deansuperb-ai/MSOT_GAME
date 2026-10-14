@@ -4208,6 +4208,7 @@ class MSOTPlatformController {
                     <div class="card-badge-header">
                         <span class="track-tag ${g.track}">${g.track === 'cpp' ? '⚡ ' + g.trackName : '🌐 ' + g.trackName}</span>
                         <span class="topic-pill">TOPIC ${String(g.topicNum).padStart(2, '0')}</span>
+                        ${g.levels ? `<span class="levels-pill">⭐ ${g.levels.length} LEVELS</span>` : ''}
                         <span class="status-pill ${isCompleted ? 'clear' : 'unlocked'}">${isCompleted ? 'CLEARED ✓' : 'CHAMBER OPEN ⚔️'}</span>
                     </div>
 
@@ -4232,7 +4233,7 @@ class MSOTPlatformController {
                             </div>
                         </div>
                         <button class="launch-game-btn ${g.track}" onclick="window.miraiGame.openGame('${g.id}')">
-                            <span>${isCompleted ? 'REPLAY ↺' : 'DEPLOY GAME ➔'}</span>
+                            <span>${isCompleted ? 'REPLAY ↺' : (g.levels ? 'DEPLOY CASES (3 LVLS) ➔' : 'DEPLOY GAME ➔')}</span>
                         </button>
                     </div>
                 </div>

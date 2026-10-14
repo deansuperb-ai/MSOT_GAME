@@ -11,6 +11,7 @@
 class MiraiGameEngine {
     constructor() {
         this.currentGame = null;
+        this.currentLevel = 1;
         this.currentQIndex = 0;
         this.lives = 3;
         this.score = 0;
@@ -36,7 +37,7 @@ class MiraiGameEngine {
         });
     }
 
-    openGame(gameId) {
+    openGame(gameId, levelNum = null) {
         if (!window.MIRAI_GAMES) return;
         const game = window.MIRAI_GAMES.find(g => g.id === gameId);
         if (!game) {
@@ -49,6 +50,7 @@ class MiraiGameEngine {
         if (!this.modal || !this.container) return;
 
         this.currentGame = game;
+        this.currentLevel = (typeof levelNum === 'number') ? levelNum : 1;
         this.currentQIndex = 0;
         this.lives = 3;
         this.score = 0;
@@ -68,7 +70,168 @@ class MiraiGameEngine {
             window.miraiAudio.playClick?.();
         }
 
+        if (game.levels && game.levels.length > 0 && levelNum === null) {
+            this.renderLevelSelect();
+        } else {
+            this.renderStage();
+        }
+    }
+
+    renderLevelSelect() {
+        if (!this.currentGame || !this.currentGame.levels) {
+            this.renderStage();
+            return;
+        }
+
+        const completedList = Array.isArray(window.msotState?.student?.completedGames)
+            ? window.msotState.student.completedGames
+            : [];
+
+        const isDetective = this.currentGame.mechanic === 'detective';
+        const heroVisual = isDetective ? `
+            <div class="detective-crime-scene" style="justify-content: center; margin-bottom: 12px;">
+                <div class="scene-radar">
+                    <div class="radar-sweep"></div>
+                    <div class="radar-dot dot1"></div>
+                    <div class="radar-dot dot2"></div>
+                </div>
+            </div>
+        ` : `
+            <div class="level-select-hero-icon" style="font-size: 52px; margin-bottom: 8px; text-align: center; filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.4));">
+                ${this.currentGame.badge?.icon || '📦'}
+            </div>
+        `;
+
+        let chamberTag = 'Challenge Scenarios';
+        let launchActionText = 'DEPLOY LEVEL';
+        if (this.currentGame.mechanic === 'detective') {
+            chamberTag = 'Crime Scenes';
+            launchActionText = 'INVESTIGATE LEVEL';
+        } else if (this.currentGame.mechanic === 'boss_battle') {
+            chamberTag = 'Combat Encounters';
+            launchActionText = 'ENGAGE BOSS LEVEL';
+        } else if (this.currentGame.mechanic === 'box_sort') {
+            chamberTag = 'Cargo Scenarios';
+            launchActionText = 'SORT CARGO LEVEL';
+        } else if (this.currentGame.mechanic === 'maze_runner') {
+            chamberTag = 'Labyrinth Portals';
+            launchActionText = 'ENTER MAZE LEVEL';
+        } else if (this.currentGame.mechanic === 'loop_racer') {
+            chamberTag = 'Grand Prix Circuits';
+            launchActionText = 'RACE CIRCUIT LEVEL';
+        } else if (this.currentGame.mechanic === 'pattern_builder') {
+            chamberTag = 'Voxel Blueprints';
+            launchActionText = 'BUILD PATTERN LEVEL';
+        } else if (this.currentGame.mechanic === 'function_factory') {
+            chamberTag = 'Automation Pipelines';
+            launchActionText = 'ENGINEER PIPELINE LEVEL';
+        } else if (this.currentGame.mechanic === 'house_builder') {
+            chamberTag = 'DOM Scaffolds';
+            launchActionText = 'CONSTRUCT DOM LEVEL';
+        } else if (this.currentGame.mechanic === 'fashion_show') {
+            chamberTag = 'Runway Stages';
+            launchActionText = 'STYLE RUNWAY LEVEL';
+        } else if (this.currentGame.mechanic === 'shopping_list') {
+            chamberTag = 'Market Inventory Carts';
+            launchActionText = 'STOCK CART LEVEL';
+        } else if (this.currentGame.mechanic === 'treasure_map') {
+            chamberTag = 'Cyber Archipelago';
+            launchActionText = 'SET SAIL TO ARCHIPELAGO';
+        } else if (this.currentGame.mechanic === 'gallery_puzzle') {
+            chamberTag = 'Holographic Art Wings';
+            launchActionText = 'MOUNT GALLERY EXHIBIT';
+        } else if (this.currentGame.mechanic === 'timetable_builder') {
+            chamberTag = 'Academy Schedules';
+            launchActionText = 'CONSTRUCT SCHEDULE GRID';
+        } else if (this.currentGame.mechanic === 'desk_rush') {
+            chamberTag = 'Admissions Desks';
+            launchActionText = 'PROCESS ADMISSIONS QUEUE';
+        } else if (this.currentGame.mechanic === 'city_planner') {
+            chamberTag = 'Metropolitan Sectors';
+            launchActionText = 'ZONE CITY SECTOR';
+        } else if (this.currentGame.mechanic === 'conveyor_sort') {
+            chamberTag = 'Sorting Pipelines';
+            launchActionText = 'START CONVEYOR SORT';
+        } else if (this.currentGame.mechanic === 'secret_codes') {
+            chamberTag = 'Cipher Dossiers';
+            launchActionText = 'DECRYPT CIPHER LEVEL';
+        }
+
+        this.container.innerHTML = `
+            <div class="game-top-sticky-bar">
+                <div class="gt-left-badge">${this.currentGame.badge?.icon || '🎮'} ${this.escapeHtml(this.currentGame.title)} // LEVEL DOSSIERS</div>
+                <button type="button" class="floating-game-close-btn" onclick="window.miraiGame.closeGame()" title="Exit Game & Return (Esc)">
+                    <span>✕ EXIT GAME</span>
+                </button>
+            </div>
+
+            <div class="level-select-container">
+                <div class="level-select-header">
+                    ${heroVisual}
+                    <span class="hud-tag">${this.escapeHtml(this.currentGame.trackName || 'DSA in C++')} • TOPIC ${this.currentGame.topicNum || 1}</span>
+                    <h2 class="level-select-title">${this.escapeHtml(this.currentGame.title)}: Level Archive</h2>
+                    <p class="level-select-subtitle">${this.escapeHtml(this.currentGame.story || 'Select a difficulty tier below to begin challenge.')}</p>
+                </div>
+
+                <div class="level-cards-grid">
+                    ${this.currentGame.levels.map(lvl => {
+                        const isLvlDone = completedList.includes(`${this.currentGame.id}_lvl${lvl.level}`);
+                        const badgeIcon = lvl.badge?.icon || '📦';
+                        return `
+                            <div class="level-card level-${lvl.level} ${isLvlDone ? 'completed' : ''}">
+                                <div class="lvl-card-top">
+                                    <span class="lvl-badge-tag">${lvl.badge?.name || ('Level ' + lvl.level)}</span>
+                                    <span class="lvl-count-pill">${lvl.questions.length} ${chamberTag}</span>
+                                </div>
+                                <div class="lvl-hero-icon">${badgeIcon}</div>
+                                <h3 class="lvl-card-title">${this.escapeHtml(lvl.title)}</h3>
+                                <p class="lvl-card-desc">${this.escapeHtml(lvl.subtitle || '')}</p>
+                                <div class="lvl-reward-row">
+                                    <span class="reward-icon">${badgeIcon}</span>
+                                    <span class="reward-text">Reward: <strong>${this.escapeHtml(lvl.badge?.name || 'Badge')}</strong></span>
+                                </div>
+                                <button type="button" class="lvl-launch-btn" onclick="window.miraiGame.startLevel(${lvl.level})">
+                                    <span>${isLvlDone ? 'REPLAY TIER ↺' : launchActionText + ' ' + lvl.level + ' ➔'}</span>
+                                </button>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <div class="level-select-actions">
+                    <button type="button" class="primary-btn" onclick="window.miraiGame.startLevel(1)">
+                        <span>🚀 START LEVEL 1 (CADET)</span>
+                    </button>
+                    <button type="button" class="secondary-btn" onclick="window.miraiGame.closeGame()">
+                        <span>EXIT TO ARCADE</span>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    startLevel(lvlNum) {
+        this.currentLevel = lvlNum;
+        this.currentQIndex = 0;
+        this.lives = 3;
+        this.score = 0;
+        this.combo = 0;
+        this.bossHP = 100;
+        this.mazeProgress = 0;
+        this.raceLaps = 0;
+        this.hintUsed = false;
+        if (window.miraiAudio) window.miraiAudio.playClick?.();
         this.renderStage();
+    }
+
+    getCurrentQuestions() {
+        if (this.currentGame && this.currentGame.levels && this.currentLevel) {
+            const lvl = this.currentGame.levels.find(l => l.level === this.currentLevel);
+            if (lvl && Array.isArray(lvl.questions)) {
+                return lvl.questions;
+            }
+        }
+        return (this.currentGame && this.currentGame.questions) || [];
     }
 
     closeGame() {
@@ -90,8 +253,9 @@ class MiraiGameEngine {
     renderStage() {
         if (!this.currentGame) return;
 
-        const totalQCount = (this.currentGame.questions && this.currentGame.questions.length) || 10;
-        const q = (this.currentGame.questions && this.currentGame.questions[this.currentQIndex]) || {};
+        const activeQuestions = this.getCurrentQuestions();
+        const totalQCount = activeQuestions.length || 10;
+        const q = activeQuestions[this.currentQIndex] || {};
         const progress = Math.round((this.currentQIndex / totalQCount) * 100);
         this.hintUsed = false;
         this.questionStartTime = Date.now();
@@ -107,10 +271,17 @@ class MiraiGameEngine {
         this.container.innerHTML = `
             <!-- Sticky Top Bar with High-Visibility Exit Button -->
             <div class="game-top-sticky-bar">
-                <div class="gt-left-badge">⛩️ ${this.escapeHtml(this.currentGame.title)}</div>
-                <button type="button" class="floating-game-close-btn" onclick="window.miraiGame.closeGame()" title="Exit Game & Return (Esc)">
-                    <span>✕ EXIT GAME</span>
-                </button>
+                <div class="gt-left-badge">⛩️ ${this.escapeHtml(this.currentGame.title)}${this.currentGame.levels ? ` // LEVEL ${this.currentLevel}` : ''}</div>
+                <div class="gt-actions-right">
+                    ${this.currentGame.levels ? `
+                        <button type="button" class="floating-game-cases-btn" onclick="window.miraiGame.renderLevelSelect()" title="View All Case Dossiers">
+                            <span>📋 ARCHIVES</span>
+                        </button>
+                    ` : ''}
+                    <button type="button" class="floating-game-close-btn" onclick="window.miraiGame.closeGame()" title="Exit Game & Return (Esc)">
+                        <span>✕ EXIT GAME</span>
+                    </button>
+                </div>
             </div>
 
             <div class="game-hud">
@@ -126,6 +297,25 @@ class MiraiGameEngine {
                     <button type="button" class="game-close-btn" onclick="window.miraiGame.closeGame()" title="Close Game">✕</button>
                 </div>
             </div>
+
+            ${this.currentGame.levels ? `
+                <!-- Level Switcher Quick Bar -->
+                <div class="level-indicator-bar">
+                    <span class="level-indicator-tag">ACTIVE LEVEL:</span>
+                    <div class="level-pill-group">
+                        ${this.currentGame.levels.map(l => `
+                            <button type="button" class="level-pill-btn ${l.level === this.currentLevel ? 'active' : ''}" 
+                                onclick="window.miraiGame.startLevel(${l.level})" title="${this.escapeHtml(l.title)}">
+                                <span>LVL ${l.level}</span>
+                                <span class="pill-count">(${l.questions.length}Q)</span>
+                            </button>
+                        `).join('')}
+                        <button type="button" class="level-pill-btn select-all-btn" onclick="window.miraiGame.renderLevelSelect()" title="View All Case Archives">
+                            <span>📋 ARCHIVES</span>
+                        </button>
+                    </div>
+                </div>
+            ` : ''}
 
             <!-- Progress bar -->
             <div class="game-progress-track">
@@ -199,10 +389,12 @@ class MiraiGameEngine {
         const qNum = this.currentQIndex + 1;
 
         if (m === 'boss_battle') {
+            const currentLevelObj = (this.currentGame.levels && this.currentGame.levels.find(l => l.level === this.currentLevel));
+            const levelLabel = currentLevelObj ? ` // ${currentLevelObj.title.toUpperCase()}` : '';
             return `
                 <div class="boss-arena">
                     <div class="boss-nameplate">
-                        <span class="boss-title">CYBER MECHA DEMON // ONI-09</span>
+                        <span class="boss-title">CYBER MECHA DEMON // ONI-09${levelLabel}</span>
                         <span class="boss-hp-text">${this.bossHP} / 100 HP</span>
                     </div>
                     <div class="boss-hp-track">
@@ -216,6 +408,8 @@ class MiraiGameEngine {
                 </div>
             `;
         } else if (m === 'detective') {
+            const currentLevelObj = (this.currentGame.levels && this.currentGame.levels.find(l => l.level === this.currentLevel));
+            const levelLabel = currentLevelObj ? ` // ${currentLevelObj.title.toUpperCase()}` : '';
             return `
                 <div class="detective-crime-scene">
                     <div class="scene-radar">
@@ -224,16 +418,18 @@ class MiraiGameEngine {
                         <div class="radar-dot dot2"></div>
                     </div>
                     <div class="evidence-board">
-                        <div class="evidence-tag">CRIME SCENE #${qNum}</div>
+                        <div class="evidence-tag">CRIME SCENE #${qNum}${levelLabel}</div>
                         <div class="evidence-desc">Scanning compiler traces for logical anomalies...</div>
                     </div>
                 </div>
             `;
         } else if (m === 'box_sort') {
+            const currentLevelObj = (this.currentGame.levels && this.currentGame.levels.find(l => l.level === this.currentLevel));
+            const levelLabel = currentLevelObj ? ` // ${currentLevelObj.title.toUpperCase()}` : '';
             return `
                 <div class="warehouse-stage">
                     <div class="warehouse-drop-item" id="warehouseItem">
-                        <span class="cargo-tag">DATA CARGO #${qNum}</span>
+                        <span class="cargo-tag">DATA CARGO #${qNum}${levelLabel}</span>
                     </div>
                     <div class="warehouse-bins">
                         <div class="w-bin bin-int"><span>int</span></div>
@@ -245,30 +441,37 @@ class MiraiGameEngine {
                 </div>
             `;
         } else if (m === 'maze_runner') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalSteps = (activeQuestions && activeQuestions.length) || 10;
+            const pct = Math.min(94, (this.mazeProgress / Math.max(1, totalSteps)) * 100);
             return `
                 <div class="maze-stage">
                     <div class="maze-gates-track">
-                        ${Array.from({ length: 10 }, (_, i) => `
+                        ${Array.from({ length: totalSteps }, (_, i) => `
                             <div class="maze-gate-step ${i < this.mazeProgress ? 'cleared' : (i === this.mazeProgress ? 'active' : '')}">
                                 <span>${i < this.mazeProgress ? '✓' : (i + 1)}</span>
                             </div>
                         `).join('')}
                     </div>
                     <div class="runner-avatar-track">
-                        <span class="runner-avatar" style="left: ${this.mazeProgress * 10}%">🏃‍♂️💨</span>
+                        <span class="runner-avatar" style="left: ${pct}%">🏃‍♂️💨</span>
                     </div>
                 </div>
             `;
         } else if (m === 'loop_racer') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalLaps = (activeQuestions && activeQuestions.length) || 10;
+            const nitroPct = Math.round((this.raceLaps / Math.max(1, totalLaps)) * 100);
+            const carLeftPct = Math.min(92, (this.raceLaps / Math.max(1, totalLaps)) * 92);
             return `
                 <div class="racing-stage">
                     <div class="race-speedometer">
-                        <span class="speed-val">NITRO: ${this.raceLaps * 10}%</span>
-                        <span class="laps-counter">LAPS COMPLETED: ${this.raceLaps} / 10</span>
+                        <span class="speed-val">NITRO: ${nitroPct}%</span>
+                        <span class="laps-counter">LAPS COMPLETED: ${this.raceLaps} / ${totalLaps}</span>
                     </div>
                     <div class="race-track-view">
                         <div class="neon-track-line"></div>
-                        <div class="race-car" style="left: ${this.raceLaps * 9}%">🏎️🔥</div>
+                        <div class="race-car" style="left: ${carLeftPct}%">🏎️🔥</div>
                     </div>
                 </div>
             `;
@@ -287,8 +490,242 @@ class MiraiGameEngine {
             return `
                 <div class="factory-stage">
                     <div class="factory-pipe pipe-in"><span>INPUT HOPPER ➔</span></div>
-                    <div class="factory-machine">⚙️ CONVERTER MACHINE #0${qNum} ⚙️</div>
+                    <div class="factory-machine">⚙️ CONVERTER MACHINE #${String(qNum).padStart(2, '0')} ⚙️</div>
                     <div class="factory-pipe pipe-out"><span>➔ OUTPUT CONDUIT</span></div>
+                </div>
+            `;
+        } else if (m === 'house_builder') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="house-builder-stage">
+                    <div class="house-blueprint-scaffold">
+                        <div class="house-beam beam-roof ${progressPct >= 70 ? 'active' : ''}"><span>▲ ROOF &lt;body&gt;</span></div>
+                        <div class="house-beam beam-walls ${progressPct >= 40 ? 'active' : ''}"><span>■ PILLARS &lt;head&gt; + &lt;title&gt;</span></div>
+                        <div class="house-beam beam-foundation ${progressPct >= 10 ? 'active' : ''}"><span>▄ FOUNDATION &lt;!DOCTYPE html&gt; + &lt;html&gt;</span></div>
+                    </div>
+                    <div class="house-builder-status">
+                        <span class="hb-badge">DOM SCAFFOLDING</span>
+                        <span class="hb-progress">${progressPct}% ASSEMBLED (${progress}/${totalQCount} BLOCKS)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'fashion_show') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="fashion-show-stage">
+                    <div class="fashion-runway-track">
+                        <div class="runway-spotlight">✨ 💃 CYBER RUNWAY MODEL #${String(Math.min(totalQCount, progress + 1)).padStart(2, '0')} 🕺 ✨</div>
+                        <div class="runway-text-preview">
+                            <span class="preview-tag">&lt;h1&gt;</span>
+                            <span class="preview-styled-text">FASHION TYPOGRAPHY</span>
+                            <span class="preview-tag">&lt;/h1&gt;</span>
+                        </div>
+                    </div>
+                    <div class="fashion-status-bar">
+                        <span class="fashion-badge">RUNWAY SPOTLIGHT</span>
+                        <span class="fashion-progress">${progress}/${totalQCount} MODELS STYLED (${progressPct}%)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'shopping_list') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="shopping-list-stage">
+                    <div class="shopping-cart-container">
+                        <div class="cart-header">🛒 CYBER MARKET INVENTORY CART</div>
+                        <div class="cart-items-preview">
+                            <span class="cart-tag">&lt;ul&gt;</span>
+                            <span class="cart-item-slot ${progress >= 1 ? 'filled' : ''}">[📦 &lt;li&gt;ITEM 01&lt;/li&gt;]</span>
+                            <span class="cart-item-slot ${progress >= 5 ? 'filled' : ''}">[📦 &lt;li&gt;ITEM 05&lt;/li&gt;]</span>
+                            <span class="cart-item-slot ${progress >= 10 ? 'filled' : ''}">[📦 &lt;li&gt;ITEM 10&lt;/li&gt;]</span>
+                            <span class="cart-tag">&lt;/ul&gt;</span>
+                        </div>
+                    </div>
+                    <div class="shopping-status-bar">
+                        <span class="cart-badge">CART CAPACITY</span>
+                        <span class="cart-progress">${progress}/${totalQCount} ITEMS STOCKED (${progressPct}%)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'treasure_map') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="treasure-map-stage">
+                    <div class="treasure-map-container">
+                        <div class="map-header">🧭 CYBERSPACE NAVIGATION RADAR</div>
+                        <div class="map-archipelago-preview">
+                            <span class="map-route-node ${progress >= 0 ? 'visited' : ''}">⚓ [PORT 00]</span>
+                            <span class="map-route-line">━━━▶</span>
+                            <span class="map-route-node ${progress >= 3 ? 'visited' : ''}">🏝️ [ISLE 03]</span>
+                            <span class="map-route-line">━━━▶</span>
+                            <span class="map-route-node ${progress >= 7 ? 'visited' : ''}">🌊 [REEF 07]</span>
+                            <span class="map-route-line">━━━▶</span>
+                            <span class="map-route-node ${progress >= totalQCount ? 'visited' : ''}">👑 [TREASURE]</span>
+                        </div>
+                    </div>
+                    <div class="map-status-bar">
+                        <span class="map-badge">EXPEDITION ROUTE</span>
+                        <span class="map-progress">${progress}/${totalQCount} WAYPOINTS CHARTED (${progressPct}%)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'gallery_puzzle') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="gallery-puzzle-stage">
+                    <div class="gallery-canvas-container">
+                        <div class="gallery-header">🖼️ MIRAI HOLOGRAPHIC ART GALLERY</div>
+                        <div class="gallery-frames-grid">
+                            <span class="art-frame ${progress >= 1 ? 'mounted' : ''}">🖼️ [FRAME 01]</span>
+                            <span class="art-frame ${progress >= 4 ? 'mounted' : ''}">🎨 [FRAME 04]</span>
+                            <span class="art-frame ${progress >= 8 ? 'mounted' : ''}">📽️ [FRAME 08]</span>
+                            <span class="art-frame ${progress >= totalQCount ? 'mounted' : ''}">🌟 [MASTERPIECE]</span>
+                        </div>
+                    </div>
+                    <div class="gallery-status-bar">
+                        <span class="gallery-badge">CURATOR EXHIBIT</span>
+                        <span class="gallery-progress">${progress}/${totalQCount} EXHIBITS MOUNTED (${progressPct}%)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'timetable_builder') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="timetable-builder-stage">
+                    <div class="timetable-grid-container">
+                        <div class="timetable-header">📊 ACADEMY TIMETABLE MATRIX</div>
+                        <div class="timetable-matrix-preview">
+                            <div class="matrix-row header-row">
+                                <span class="matrix-cell th-cell">&lt;th&gt;PERIOD&lt;/th&gt;</span>
+                                <span class="matrix-cell th-cell">&lt;th&gt;MON&lt;/th&gt;</span>
+                                <span class="matrix-cell th-cell">&lt;th&gt;TUE&lt;/th&gt;</span>
+                            </div>
+                            <div class="matrix-row">
+                                <span class="matrix-cell ${progress >= 1 ? 'filled' : ''}">&lt;td&gt;01&lt;/td&gt;</span>
+                                <span class="matrix-cell ${progress >= 4 ? 'filled' : ''}">&lt;td&gt;MATH&lt;/td&gt;</span>
+                                <span class="matrix-cell ${progress >= 7 ? 'filled' : ''}">&lt;td&gt;CODE&lt;/td&gt;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timetable-status-bar">
+                        <span class="timetable-badge">GRID CELLS</span>
+                        <span class="timetable-progress">${progress}/${totalQCount} CELLS ASSEMBLED (${progressPct}%)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'desk_rush') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="desk-rush-stage">
+                    <div class="desk-queue-container">
+                        <div class="desk-header">📝 MIRAI ADMISSIONS REGISTRATION DESK</div>
+                        <div class="desk-queue-preview">
+                            <span class="queue-cadet ${progress >= 1 ? 'processed' : ''}">🪪 [CADET 01]</span>
+                            <span class="queue-cadet ${progress >= 4 ? 'processed' : ''}">🪪 [CADET 04]</span>
+                            <span class="queue-cadet ${progress >= 8 ? 'processed' : ''}">🪪 [CADET 08]</span>
+                            <span class="queue-cadet ${progress >= totalQCount ? 'processed' : ''}">🎓 [ADMITTED]</span>
+                        </div>
+                    </div>
+                    <div class="desk-status-bar">
+                        <span class="desk-badge">ADMISSION QUEUE</span>
+                        <span class="desk-progress">${progress}/${totalQCount} CADETS PROCESSED (${progressPct}%)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'city_planner') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="city-planner-stage">
+                    <div class="city-skyline-container">
+                        <div class="city-header">🏙️ NEO-TOKYO METROPOLITAN BLUEPRINT</div>
+                        <div class="city-sectors-preview">
+                            <span class="city-zone ${progress >= 1 ? 'zoned' : ''}">🏛️ &lt;header&gt;</span>
+                            <span class="city-zone ${progress >= 3 ? 'zoned' : ''}">🚇 &lt;nav&gt;</span>
+                            <span class="city-zone ${progress >= 5 ? 'zoned' : ''}">🏢 &lt;main&gt;</span>
+                            <span class="city-zone ${progress >= 8 ? 'zoned' : ''}">🏬 &lt;aside&gt;</span>
+                            <span class="city-zone ${progress >= totalQCount ? 'zoned' : ''}">⚓ &lt;footer&gt;</span>
+                        </div>
+                    </div>
+                    <div class="city-status-bar">
+                        <span class="city-badge">URBAN ZONING</span>
+                        <span class="city-progress">${progress}/${totalQCount} SECTORS ZONED (${progressPct}%)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'conveyor_sort') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="conveyor-sort-stage">
+                    <div class="conveyor-belt-container">
+                        <div class="conveyor-header">⚡ RENDERING PIPELINE CONVEYOR BELT</div>
+                        <div class="conveyor-bins-preview">
+                            <div class="conveyor-bin block-bin">
+                                <span class="bin-label">📦 BLOCK BIN</span>
+                                <span class="bin-tag ${progress >= 1 ? 'sorted' : ''}">&lt;div&gt;</span>
+                                <span class="bin-tag ${progress >= 5 ? 'sorted' : ''}">&lt;p&gt;</span>
+                            </div>
+                            <div class="conveyor-divider">⚡</div>
+                            <div class="conveyor-bin inline-bin">
+                                <span class="bin-label">🔗 INLINE BIN</span>
+                                <span class="bin-tag ${progress >= 3 ? 'sorted' : ''}">&lt;span&gt;</span>
+                                <span class="bin-tag ${progress >= 8 ? 'sorted' : ''}">&lt;a&gt;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="conveyor-status-bar">
+                        <span class="conveyor-badge">SORTING ACCURACY</span>
+                        <span class="conveyor-progress">${progress}/${totalQCount} TAGS CLASSIFIED (${progressPct}%)</span>
+                    </div>
+                </div>
+            `;
+        } else if (m === 'secret_codes') {
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const progress = Math.min(totalQCount, this.currentQIndex);
+            const progressPct = Math.round((progress / totalQCount) * 100);
+            return `
+                <div class="secret-codes-stage">
+                    <div class="secret-terminal-container">
+                        <div class="terminal-header">🕵️ MIRAI INTELLIGENCE CIPHER TERMINAL</div>
+                        <div class="terminal-ciphers-preview">
+                            <span class="cipher-node ${progress >= 1 ? 'decrypted' : ''}">🔐 &amp;lt;</span>
+                            <span class="cipher-node ${progress >= 3 ? 'decrypted' : ''}">📜 &lt;!-- --&gt;</span>
+                            <span class="cipher-node ${progress >= 6 ? 'decrypted' : ''}">🛰️ &lt;iframe&gt;</span>
+                            <span class="cipher-node ${progress >= 8 ? 'decrypted' : ''}">🏷️ &lt;meta&gt;</span>
+                            <span class="cipher-node ${progress >= totalQCount ? 'decrypted' : ''}">💎 [DECRYPTED]</span>
+                        </div>
+                    </div>
+                    <div class="terminal-status-bar">
+                        <span class="terminal-badge">CIPHER DECRYPTION</span>
+                        <span class="terminal-progress">${progress}/${totalQCount} INTEL INTERCEPTED (${progressPct}%)</span>
+                    </div>
                 </div>
             `;
         } else {
@@ -316,7 +753,8 @@ class MiraiGameEngine {
     }
 
     submitAnswer(chosenIdx) {
-        const q = (this.currentGame.questions && this.currentGame.questions[this.currentQIndex]) || {};
+        const activeQuestions = this.getCurrentQuestions();
+        const q = (activeQuestions && activeQuestions[this.currentQIndex]) || {};
         const targetCorrect = (typeof q.correctIndex === 'number') ? q.correctIndex : (typeof q.correct === 'number' ? q.correct : 0);
         const isCorrect = chosenIdx === targetCorrect;
         const fbPanel = document.getElementById('feedbackPanel');
@@ -431,7 +869,10 @@ class MiraiGameEngine {
         const m = this.currentGame.mechanic;
 
         if (m === 'boss_battle') {
-            const damage = isCritical ? 15 : 10;
+            const activeQuestions = this.getCurrentQuestions();
+            const totalQCount = (activeQuestions && activeQuestions.length) || 10;
+            const baseDamage = Math.ceil(100 / totalQCount);
+            const damage = isCritical ? Math.min(this.bossHP, Math.ceil(baseDamage * 1.5)) : Math.min(this.bossHP, baseDamage);
             this.bossHP = Math.max(0, this.bossHP - damage);
             const hpFill = document.querySelector('.boss-hp-fill');
             const hpText = document.querySelector('.boss-hp-text');
@@ -451,9 +892,13 @@ class MiraiGameEngine {
                 setTimeout(() => dmgNum.classList.remove('pop'), 700);
             }
         } else if (m === 'maze_runner') {
-            this.mazeProgress = Math.min(10, this.mazeProgress + 1);
+            const activeQuestions = this.getCurrentQuestions();
+            const maxProgress = (activeQuestions && activeQuestions.length) || 10;
+            this.mazeProgress = Math.min(maxProgress, this.mazeProgress + 1);
         } else if (m === 'loop_racer') {
-            this.raceLaps = Math.min(10, this.raceLaps + 1);
+            const activeQuestions = this.getCurrentQuestions();
+            const maxLaps = (activeQuestions && activeQuestions.length) || 10;
+            this.raceLaps = Math.min(maxLaps, this.raceLaps + 1);
         }
     }
 
@@ -467,8 +912,10 @@ class MiraiGameEngine {
     }
 
     nextQuestion() {
+        const activeQuestions = this.getCurrentQuestions();
+        const totalQCount = (activeQuestions && activeQuestions.length) || 10;
         this.currentQIndex++;
-        if (this.currentQIndex < 10 && this.lives > 0) {
+        if (this.currentQIndex < totalQCount && this.lives > 0) {
             this.renderStage();
         } else {
             this.finishGame();
@@ -476,20 +923,31 @@ class MiraiGameEngine {
     }
 
     finishGame() {
-        // Victory!
+        // Victory or Defeat
         const isVictory = this.lives > 0;
-        const badge = this.currentGame.badge;
+        const currentLevelObj = this.currentGame.levels && this.currentLevel
+            ? this.currentGame.levels.find(l => l.level === this.currentLevel)
+            : null;
+        const badge = currentLevelObj?.badge || this.currentGame.badge;
 
         if (isVictory) {
-            // Award Badge & Platform XP
-            if (window.msotState?.awardBadge) {
+            // Award Level Badge & Platform XP
+            if (window.msotState?.awardBadge && badge?.id) {
                 window.msotState.awardBadge(badge.id);
             }
             if (window.msotState?.recordXP) {
-                window.msotState.recordXP('GAME_TOPIC_CLEAR', this.score, `${this.currentGame.title} Clear`);
+                const clearTitle = currentLevelObj ? `${currentLevelObj.title} Clear` : `${this.currentGame.title} Clear`;
+                window.msotState.recordXP('GAME_TOPIC_CLEAR', this.score, clearTitle);
             }
-            if (window.msotState?.student && !window.msotState.student.completedGames.includes(this.currentGame.id)) {
-                window.msotState.student.completedGames.push(this.currentGame.id);
+            if (window.msotState?.student) {
+                const lvlKey = currentLevelObj ? `${this.currentGame.id}_lvl${this.currentLevel}` : this.currentGame.id;
+                if (!window.msotState.student.completedGames.includes(lvlKey)) {
+                    window.msotState.student.completedGames.push(lvlKey);
+                }
+                const isFinalLevel = !this.currentGame.levels || (this.currentLevel === this.currentGame.levels.length);
+                if (isFinalLevel && !window.msotState.student.completedGames.includes(this.currentGame.id)) {
+                    window.msotState.student.completedGames.push(this.currentGame.id);
+                }
                 window.msotState.save();
             }
 
@@ -497,11 +955,14 @@ class MiraiGameEngine {
                 window.miraiAudio.playBadgeFanfare?.();
             }
 
+            const hasNextLevel = this.currentGame.levels && (this.currentLevel < this.currentGame.levels.length);
+            const nextLevelNum = this.currentLevel + 1;
+
             this.container.innerHTML = `
                 <div class="victory-modal">
                     <div class="victory-halo">✨</div>
                     <div class="victory-badge-icon">${badge.icon}</div>
-                    <h2 class="victory-title">STAGE COMPLETE!</h2>
+                    <h2 class="victory-title">${currentLevelObj ? `${currentLevelObj.title.toUpperCase()} CLEARED!` : 'STAGE COMPLETE!'}</h2>
                     <h4 class="victory-badge-name">Unlocked Badge: ${badge.name}</h4>
                     <p class="victory-desc">${badge.desc}</p>
                     <div class="victory-stats">
@@ -510,7 +971,22 @@ class MiraiGameEngine {
                         <div class="v-stat"><span class="v-label">HIGHEST COMBO</span><span class="v-num">${this.combo}x</span></div>
                     </div>
                     <div class="victory-actions">
-                        <button class="primary-btn" onclick="window.miraiGame.closeGame(); window.msotPlatform?.refreshAll?.();">
+                        ${hasNextLevel ? `
+                            <button class="primary-btn" onclick="window.miraiGame.startLevel(${nextLevelNum})">
+                                PROCEED TO LEVEL ${nextLevelNum} ➔
+                            </button>
+                            <button class="secondary-btn" onclick="window.miraiGame.renderLevelSelect()">
+                                CASE ARCHIVES (CHOOSE LEVEL) 📋
+                            </button>
+                        ` : (this.currentGame.levels ? `
+                            <button class="primary-btn" onclick="window.miraiGame.renderLevelSelect()">
+                                ALL LEVELS COMPLETED! VIEW DOSSIERS 🏆
+                            </button>
+                            <button class="secondary-btn" onclick="window.miraiGame.startLevel(${this.currentLevel})">
+                                REPLAY LEVEL ${this.currentLevel} ↺
+                            </button>
+                        ` : '')}
+                        <button class="${hasNextLevel ? 'secondary-btn' : 'primary-btn'}" onclick="window.miraiGame.closeGame(); window.msotPlatform?.refreshAll?.();">
                             COLLECT REWARD & RETURN TO ARCADE ➔
                         </button>
                     </div>
@@ -521,11 +997,16 @@ class MiraiGameEngine {
                 <div class="victory-modal defeat">
                     <div class="victory-halo">💀</div>
                     <h2 class="victory-title">MISSION FAILED</h2>
-                    <p class="victory-desc">You ran out of lives during the cyber trial. Review your concepts and challenge again!</p>
+                    <p class="victory-desc">You ran out of lives during ${currentLevelObj ? currentLevelObj.title : 'the cyber trial'}. Review your concepts and challenge again!</p>
                     <div class="victory-actions">
-                        <button class="primary-btn" onclick="window.miraiGame.openGame('${this.currentGame.id}')">
-                            RETRY SIMULATION ↺
+                        <button class="primary-btn" onclick="${this.currentGame.levels ? `window.miraiGame.startLevel(${this.currentLevel})` : `window.miraiGame.openGame('${this.currentGame.id}')`}">
+                            RETRY ${currentLevelObj ? 'LEVEL ' + this.currentLevel : 'SIMULATION'} ↺
                         </button>
+                        ${this.currentGame.levels ? `
+                            <button class="secondary-btn" onclick="window.miraiGame.renderLevelSelect()">
+                                CHOOSE ANOTHER LEVEL 📋
+                            </button>
+                        ` : ''}
                         <button class="secondary-btn" onclick="window.miraiGame.closeGame()">
                             EXIT TO ARCADE
                         </button>

@@ -994,3 +994,1124 @@
     }
 }
 
+/* ==========================================================================
+   MULTI-LEVEL GAME SYSTEM (Code Detective Dossiers & Levels)
+   ========================================================================== */
+.gt-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.floating-game-cases-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 240, 255, 0.12);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    color: #00f0ff;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.floating-game-cases-btn:hover {
+    background: rgba(0, 240, 255, 0.25);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.35);
+    color: #ffffff;
+}
+
+.level-indicator-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 8px 14px;
+    background: rgba(0, 240, 255, 0.04);
+    border: 1px solid rgba(0, 240, 255, 0.16);
+    border-radius: 10px;
+}
+
+.level-indicator-tag {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #00f0ff;
+    text-transform: uppercase;
+}
+
+.level-pill-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.level-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #94a3b8;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.level-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.level-pill-btn.active {
+    background: rgba(0, 240, 255, 0.22);
+    border-color: rgba(0, 240, 255, 0.75);
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
+}
+
+.level-pill-btn .pill-count {
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+.level-pill-btn.select-all-btn {
+    border-color: rgba(244, 63, 94, 0.35);
+    color: #f43f5e;
+}
+
+.level-pill-btn.select-all-btn:hover {
+    background: rgba(244, 63, 94, 0.15);
+    color: #ffffff;
+}
+
+.level-select-container {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 8px 4px;
+}
+
+.level-select-header {
+    text-align: center;
+}
+
+.level-select-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 6px 0 8px 0;
+    letter-spacing: 0.5px;
+}
+
+.level-select-subtitle {
+    font-size: 13.5px;
+    color: #94a3b8;
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.level-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin-top: 6px;
+}
+
+.level-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.level-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 240, 255, 0.15);
+}
+
+.level-card.level-1 {
+    border-color: rgba(59, 130, 246, 0.4);
+}
+.level-card.level-1:hover {
+    border-color: rgba(59, 130, 246, 0.8);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(59, 130, 246, 0.25);
+}
+
+.level-card.level-2 {
+    border-color: rgba(168, 85, 247, 0.4);
+}
+.level-card.level-2:hover {
+    border-color: rgba(168, 85, 247, 0.8);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(168, 85, 247, 0.25);
+}
+
+.level-card.level-3 {
+    border-color: rgba(244, 63, 94, 0.4);
+}
+.level-card.level-3:hover {
+    border-color: rgba(244, 63, 94, 0.85);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(244, 63, 94, 0.25);
+}
+
+.lvl-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lvl-badge-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.lvl-count-pill {
+    font-size: 11px;
+    font-weight: 700;
+    color: #00f0ff;
+}
+
+.lvl-hero-icon {
+    font-size: 38px;
+    margin: 2px 0;
+}
+
+.lvl-card-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+}
+
+.lvl-card-desc {
+    font-size: 12.5px;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.lvl-reward-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #facc15;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lvl-launch-btn {
+    width: 100%;
+    padding: 11px 16px;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.18), rgba(59, 130, 246, 0.28));
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lvl-launch-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.32), rgba(59, 130, 246, 0.42));
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+.level-select-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.levels-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(0, 240, 255, 0.12);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    color: #00f0ff;
+}
+
+/* ==========================================================================
+   HOUSE BUILDER MECHANIC
+   ========================================================================== */
+.house-builder-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.house-blueprint-scaffold {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    max-width: 480px;
+}
+
+.house-beam {
+    padding: 7px 14px;
+    border-radius: 6px;
+    background: rgba(20, 25, 38, 0.7);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.house-beam.active {
+    background: rgba(0, 240, 255, 0.16);
+    border: 1px solid #00f0ff;
+    color: #00f0ff;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+}
+
+.house-builder-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.hb-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+}
+
+/* ==========================================================================
+   FASHION SHOW MECHANIC
+   ========================================================================== */
+.fashion-show-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.fashion-runway-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, rgba(255, 0, 128, 0.12), rgba(121, 40, 202, 0.16));
+    border: 1px solid rgba(255, 0, 128, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 0, 128, 0.15);
+}
+
+.runway-spotlight {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ff007f;
+    text-shadow: 0 0 10px rgba(255, 0, 128, 0.6);
+}
+
+.runway-text-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.preview-tag {
+    color: #00f0ff;
+    font-size: 12px;
+}
+
+.preview-styled-text {
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.fashion-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.fashion-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 0, 128, 0.18);
+    border: 1px solid rgba(255, 0, 128, 0.5);
+    color: #ff007f;
+}
+
+/* ===================================================
+   Shopping List Challenge Stage
+   =================================================== */
+.shopping-list-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.shopping-cart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 520px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.08), rgba(0, 255, 136, 0.12));
+    border: 1px solid rgba(0, 255, 136, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+}
+
+.cart-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.cart-items-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.cart-tag {
+    color: #00f0ff;
+    font-size: 12px;
+}
+
+.cart-item-slot {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.cart-item-slot.filled {
+    background: rgba(0, 255, 136, 0.18);
+    border: 1px solid #00ff88;
+    color: #00ff88;
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.35);
+    transform: scale(1.04);
+}
+
+.shopping-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.cart-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 255, 136, 0.16);
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    color: #00ff88;
+}
+
+.cart-progress {
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+/* ===================================================
+   Treasure Map Navigation Stage
+   =================================================== */
+.treasure-map-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.treasure-map-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 540px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(0, 240, 255, 0.15));
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.16);
+}
+
+.map-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #00f0ff;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+.map-archipelago-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.map-route-node {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.map-route-node.visited {
+    background: rgba(0, 240, 255, 0.18);
+    border: 1px solid #00f0ff;
+    color: #00f0ff;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.4);
+    transform: scale(1.05);
+}
+
+.map-route-line {
+    color: rgba(0, 240, 255, 0.45);
+    font-size: 11px;
+    letter-spacing: -1px;
+}
+
+.map-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.map-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.45);
+    color: #00f0ff;
+}
+
+.map-progress {
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+/* ===================================================
+   Photo Gallery Puzzle Stage
+   =================================================== */
+.gallery-puzzle-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.gallery-canvas-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 540px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(180, 0, 255, 0.12), rgba(255, 0, 180, 0.15));
+    border: 1px solid rgba(220, 100, 255, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 0 22px rgba(180, 0, 255, 0.2);
+}
+
+.gallery-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #e099ff;
+    text-shadow: 0 0 10px rgba(220, 100, 255, 0.6);
+}
+
+.gallery-frames-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.art-frame {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.art-frame.mounted {
+    background: rgba(180, 0, 255, 0.22);
+    border: 1px solid #d488ff;
+    color: #ffde59;
+    box-shadow: 0 0 14px rgba(212, 136, 255, 0.45);
+    transform: scale(1.05);
+}
+
+.gallery-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.gallery-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(180, 0, 255, 0.18);
+    border: 1px solid rgba(220, 100, 255, 0.45);
+    color: #e099ff;
+}
+
+.gallery-progress {
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+/* ===================================================
+   Classroom Timetable Builder Stage
+   =================================================== */
+.timetable-builder-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.timetable-grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 520px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(0, 210, 255, 0.1), rgba(0, 110, 255, 0.15));
+    border: 1px solid rgba(0, 210, 255, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 0 22px rgba(0, 210, 255, 0.18);
+}
+
+.timetable-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #00d2ff;
+    text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+}
+
+.timetable-matrix-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.matrix-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.matrix-cell {
+    flex: 1;
+    text-align: center;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.matrix-cell.th-cell {
+    background: rgba(0, 210, 255, 0.15);
+    border: 1px solid rgba(0, 210, 255, 0.45);
+    color: #00d2ff;
+    font-weight: 800;
+}
+
+.matrix-cell.filled {
+    background: rgba(0, 255, 170, 0.2);
+    border: 1px solid #00ffaa;
+    color: #00ffaa;
+    box-shadow: 0 0 12px rgba(0, 255, 170, 0.4);
+    transform: scale(1.03);
+}
+
+.timetable-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.timetable-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 210, 255, 0.16);
+    border: 1px solid rgba(0, 210, 255, 0.45);
+    color: #00d2ff;
+}
+
+.timetable-progress {
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+/* ===================================================
+   Registration Desk Rush Stage
+   =================================================== */
+.desk-rush-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.desk-queue-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 530px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.12), rgba(255, 80, 0, 0.15));
+    border: 1px solid rgba(255, 140, 0, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 0 22px rgba(255, 140, 0, 0.18);
+}
+
+.desk-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ffaa00;
+    text-shadow: 0 0 10px rgba(255, 140, 0, 0.6);
+}
+
+.desk-queue-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.queue-cadet {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.queue-cadet.processed {
+    background: rgba(255, 170, 0, 0.22);
+    border: 1px solid #ffaa00;
+    color: #00ffcc;
+    box-shadow: 0 0 14px rgba(255, 170, 0, 0.45);
+    transform: scale(1.05);
+}
+
+.desk-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.desk-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 140, 0, 0.18);
+    border: 1px solid rgba(255, 140, 0, 0.45);
+    color: #ffaa00;
+}
+
+.desk-progress {
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+/* ===================================================
+   City Planner Stage
+   =================================================== */
+.city-planner-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.city-skyline-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 540px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(0, 180, 255, 0.12), rgba(180, 0, 255, 0.15));
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.18);
+}
+
+.city-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #00f0ff;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+.city-sectors-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.city-zone {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.city-zone.zoned {
+    background: rgba(0, 240, 255, 0.2);
+    border: 1px solid #00f0ff;
+    color: #ff00ea;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.45);
+    transform: scale(1.05);
+}
+
+.city-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.city-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 240, 255, 0.16);
+    border: 1px solid rgba(0, 240, 255, 0.45);
+    color: #00f0ff;
+}
+
+.city-progress {
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+/* ===================================================
+   Block vs Inline Sorting Race Stage
+   =================================================== */
+.conveyor-sort-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.conveyor-belt-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 540px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(255, 238, 0, 0.1), rgba(0, 240, 255, 0.15));
+    border: 1px solid rgba(255, 238, 0, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 0 22px rgba(255, 238, 0, 0.18);
+}
+
+.conveyor-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ffee00;
+    text-shadow: 0 0 10px rgba(255, 238, 0, 0.6);
+}
+
+.conveyor-bins-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.conveyor-bin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.bin-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #00f0ff;
+}
+
+.bin-tag {
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.bin-tag.sorted {
+    background: rgba(0, 255, 170, 0.22);
+    border: 1px solid #00ffaa;
+    color: #00ffaa;
+    box-shadow: 0 0 12px rgba(0, 255, 170, 0.45);
+    transform: scale(1.05);
+}
+
+.conveyor-divider {
+    font-size: 18px;
+    color: #ffee00;
+    text-shadow: 0 0 8px rgba(255, 238, 0, 0.7);
+}
+
+.conveyor-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.conveyor-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 238, 0, 0.16);
+    border: 1px solid rgba(255, 238, 0, 0.45);
+    color: #ffee00;
+}
+
+.conveyor-progress {
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+/* ===================================================
+   Secret Codes and Hidden Notes Stage
+   =================================================== */
+.secret-codes-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.secret-terminal-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 540px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(0, 255, 102, 0.1), rgba(0, 150, 80, 0.15));
+    border: 1px solid rgba(0, 255, 102, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 0 22px rgba(0, 255, 102, 0.18);
+}
+
+.terminal-header {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #00ff66;
+    text-shadow: 0 0 10px rgba(0, 255, 102, 0.6);
+}
+
+.terminal-ciphers-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.cipher-node {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.cipher-node.decrypted {
+    background: rgba(0, 255, 102, 0.2);
+    border: 1px solid #00ff66;
+    color: #00ff66;
+    box-shadow: 0 0 14px rgba(0, 255, 102, 0.45);
+    transform: scale(1.05);
+}
+
+.terminal-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.terminal-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 255, 102, 0.16);
+    border: 1px solid rgba(0, 255, 102, 0.45);
+    color: #00ff66;
+}
+
+.terminal-progress {
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+
+
+
+
+
+
+
+
+
+

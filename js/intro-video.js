@@ -1,17 +1,21 @@
 /**
- * Mirai School of Technology — Asur Guardian Protocol Cinematic Intro
- * Sacred Mask Gate Opening & Portal Emergence
+ * Mirai School of Technology — Cinematic Guardian Protocol Intro
+ * Sacred Mask Split & Sanskrit Reveal ("अंतः अस्ति प्रारंभ")
  *
- * Choreography:
- * 1. Slow-motion approach of the 2.8K Asur mask video (playbackRate 0.75, GPU-accelerated 60FPS)
- * 2. Background music (asur_dark_side_intro_bgm.mp3) plays continuously throughout
- * 3. NO BLAST, NO CUBES:
- *    At the peak moment, a brilliant laser crevice ignites down the center line of the mask.
- *    The mask splits and opens like a sacred temple portal gate from the middle (Left and Right doors swing open in 3D perspective).
- * 4. Radiant golden portal light and streaming embers pour forward through the opening gate.
- * 5. Out from within the opened gate, the glowing fiery orange website title emerges:
- *    "MIRAI SCHOOL OF TECHNOLOGY"
- *    and the "ENTER CADET DASHBOARD ➔" button comes into view.
+ * Cinematic Choreography & Timeline:
+ * 0.0s – 1.8s: Pitch-black void, deep sub-drone, atmospheric smoke & drifting ash.
+ * 1.8s – 5.0s: Intimidating ancient mask emerges with 3D Dolly Zoom & living levitation float.
+ *              Anamorphic specular light gleams across metal contours; demonic eyes awaken with laser flares.
+ * 5.0s – 5.8s: Center fissure crack ignites with blazing molten laser light and seam sparks.
+ * 5.8s – 7.0s: CAMERA SHAKE + CINEMATIC BASS BOOM + SHOCKWAVE!
+ *              Mask physically splits into two symmetrical halves, moving apart in 3D perspective.
+ * 7.0s – 10.2s: Sanskrit sacred reveal: "अंतः अस्ति प्रारंभ" (END IS THE NEW BEGINNING) forged from fire.
+ * 10.2s – 12.0s: Brand forged reveal: "MIRAI SCHOOL OF TECHNOLOGY" with sweeping light rays.
+ * 12.0s – 15.0s: Interactive "⚔ OPEN DASHBOARD ⚔" button emerges with flowing fire border.
+ *
+ * Performance:
+ * Ultra-high 60–120 FPS rendering pipeline using offscreen cached particle sprites,
+ * hardware-accelerated additive composite blending ('lighter'), and zero CPU Gaussian blur stalls.
  */
 
 (function () {
@@ -22,32 +26,50 @@
 
     class IntroVideoController {
         constructor() {
+            // DOM Elements
             this.overlay = null;
             this.stage = null;
-            this.maskContainer = null;
-            this.unifiedWrap = null;
-            this.gateDoors = null;
-            this.gateBeam = null;
+            this.maskViewport = null;
+            this.maskSolid = null;
+            this.crackOverlay = null;
+            this.maskLeft = null;
+            this.maskRight = null;
+            this.innerSanctum = null;
+            this.shockwaveRing = null;
+            this.sanskritContainer = null;
+            this.brandContainer = null;
             this.heroVideo = null;
             this.ambientVideo = null;
-            this.fireTextReveal = null;
             this.canvas = null;
             this.ctx = null;
             this.bgmAudio = null;
             this.unmuteBtn = null;
             this.portalOverlay = null;
 
-            this.isOpen = false;
+            // Audio Context
+            this.audioCtx = null;
             this.isSoundEnabled = false;
+
+            // State flags
+            this.isOpen = false;
             this.isPlaying = false;
             this.isTransitioning = false;
-            this.gateOpened = false;
+            this.maskSplitOccurred = false;
 
+            // High-Performance Particles
             this.ambientEmbers = [];
-            this.portalEmbers = [];
+            this.vortexEmbers = [];
+            this.fissureEmbers = [];
+            this.smokePuffs = [];
             this.animationFrameId = null;
-            this.gateTimeout = null;
-            this.textEmergeTimeout = null;
+
+            // Pre-rendered Cached Sprites for Max FPS
+            this.spriteGold = null;
+            this.spriteRed = null;
+            this.spriteSmoke = null;
+
+            // Timers
+            this.timelineTimeouts = [];
 
             // 3D Mouse Parallax
             this.mouseX = 0;
@@ -58,6 +80,7 @@
 
         init() {
             this.cacheDom();
+            this.initParticleSprites();
             this.initCanvas();
             this.bindEvents();
 
@@ -68,7 +91,7 @@
                 this.bgmAudio.load();
             }
 
-            // Auto-trigger on initial visit
+            // Auto-trigger on initial visit or #/intro hash
             const hasSeen = sessionStorage.getItem(STORAGE_KEY_INTRO_SEEN);
             const isIntroHash = window.location.hash === '#/intro';
 
@@ -82,18 +105,71 @@
         cacheDom() {
             this.overlay = document.getElementById('msotIntroOverlay');
             this.stage = document.getElementById('msotIntroStage');
-            this.maskContainer = document.getElementById('msotMaskContainer');
-            this.videoWrap = document.getElementById('msotMaskVideoWrap');
-            this.gateDoors = document.getElementById('msotMaskGateDoors');
-            this.centerCrevice = document.getElementById('msotCenterCrevice');
+            this.maskViewport = document.getElementById('msotMaskViewport');
+            this.maskSolid = document.getElementById('msotMaskSolid');
+            this.crackOverlay = document.getElementById('msotCrackOverlay');
+            this.maskLeft = document.getElementById('msotMaskLeft');
+            this.maskRight = document.getElementById('msotMaskRight');
+            this.innerSanctum = document.getElementById('msotInnerSanctum');
+            this.shockwaveRing = document.getElementById('msotShockwaveRing');
+            this.sanskritContainer = document.getElementById('msotSanskritContainer');
+            this.brandContainer = document.getElementById('msotBrandContainer');
             this.heroVideo = document.getElementById('msotHeroVideo');
             this.ambientVideo = document.getElementById('msotIntroAmbientVideo');
-            this.fireTextReveal = document.getElementById('msotFireTextReveal');
             this.canvas = document.getElementById('msotMaskCanvas');
             this.bgmAudio = document.getElementById('msotIntroBgmAudio');
             this.unmuteBtn = document.getElementById('msotIntroUnmuteBtn');
             this.portalOverlay = document.getElementById('msotTransitionPortal');
         }
+
+        /**
+         * Pre-renders glowing radial sprites into offscreen canvases.
+         * Eliminates expensive ctx.shadowBlur & ctx.createRadialGradient inside the render loop!
+         */
+        initParticleSprites() {
+            // 1. Radiant Molten Gold Ember Sprite (64x64)
+            this.spriteGold = document.createElement('canvas');
+            this.spriteGold.width = 64;
+            this.spriteGold.height = 64;
+            const ctxG = this.spriteGold.getContext('2d');
+            const gradG = ctxG.createRadialGradient(32, 32, 0, 32, 32, 32);
+            gradG.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            gradG.addColorStop(0.2, 'rgba(254, 240, 138, 0.95)');
+            gradG.addColorStop(0.5, 'rgba(245, 158, 11, 0.7)');
+            gradG.addColorStop(0.8, 'rgba(234, 88, 12, 0.25)');
+            gradG.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctxG.fillStyle = gradG;
+            ctxG.fillRect(0, 0, 64, 64);
+
+            // 2. Incandescent Crimson Flame Ember Sprite (64x64)
+            this.spriteRed = document.createElement('canvas');
+            this.spriteRed.width = 64;
+            this.spriteRed.height = 64;
+            const ctxR = this.spriteRed.getContext('2d');
+            const gradR = ctxR.createRadialGradient(32, 32, 0, 32, 32, 32);
+            gradR.addColorStop(0, 'rgba(255, 240, 220, 1)');
+            gradR.addColorStop(0.25, 'rgba(239, 68, 68, 0.9)');
+            gradR.addColorStop(0.6, 'rgba(185, 28, 28, 0.55)');
+            gradR.addColorStop(0.85, 'rgba(127, 29, 29, 0.2)');
+            gradR.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctxR.fillStyle = gradR;
+            ctxR.fillRect(0, 0, 64, 64);
+
+            // 3. Volumetric Smoke Cloud Sprite (128x128)
+            this.spriteSmoke = document.createElement('canvas');
+            this.spriteSmoke.width = 128;
+            this.spriteSmoke.height = 128;
+            const ctxS = this.spriteSmoke.getContext('2d');
+            const gradS = ctxS.createRadialGradient(64, 64, 0, 64, 64, 64);
+            gradS.addColorStop(0, 'rgba(70, 12, 18, 0.38)');
+            gradS.addColorStop(0.45, 'rgba(40, 6, 10, 0.2)');
+            gradS.addColorStop(0.8, 'rgba(18, 2, 5, 0.06)');
+            gradS.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctxS.fillStyle = gradS;
+            ctxS.fillRect(0, 0, 128, 128);
+        }
+
+
 
         initCanvas() {
             if (!this.canvas) return;
@@ -102,18 +178,31 @@
             window.addEventListener('resize', () => this.resizeCanvas());
 
             this.ambientEmbers = [];
-            this.portalEmbers = [];
-            const count = 80;
-            for (let i = 0; i < count; i++) {
-                this.ambientEmbers.push(this.createEmber(true));
+            this.vortexEmbers = [];
+            this.fissureEmbers = [];
+            this.smokePuffs = [];
+
+            // 1. Ambient rising embers
+            for (let i = 0; i < 75; i++) {
+                this.ambientEmbers.push(this.createAmbientEmber(true));
+            }
+
+            // 2. Swirling vortex embers orbiting the mask in 3D
+            for (let i = 0; i < 35; i++) {
+                this.vortexEmbers.push(this.createVortexEmber());
+            }
+
+            // 3. Ambient background smoke puffs
+            for (let i = 0; i < 14; i++) {
+                this.smokePuffs.push(this.createSmokePuff(true));
             }
         }
 
         resizeCanvas() {
             if (!this.canvas) return;
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            this.canvas.width = window.innerWidth * dpr;
-            this.canvas.height = window.innerHeight * dpr;
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.75); // Capped at 1.75 for 120FPS fluidity
+            this.canvas.width = Math.floor(window.innerWidth * dpr);
+            this.canvas.height = Math.floor(window.innerHeight * dpr);
             this.canvas.style.width = window.innerWidth + 'px';
             this.canvas.style.height = window.innerHeight + 'px';
             if (this.ctx) {
@@ -121,73 +210,248 @@
             }
         }
 
-        createEmber(initial = false) {
+        createAmbientEmber(initial = false) {
             const w = window.innerWidth;
             const h = window.innerHeight;
             return {
                 x: Math.random() * w,
                 y: initial ? Math.random() * h : h + Math.random() * 20,
-                radius: Math.random() * 2.2 + 0.8,
+                radius: Math.random() * 3.0 + 1.2,
                 speedY: Math.random() * 1.5 + 0.6,
                 speedX: (Math.random() - 0.5) * 0.9,
-                opacity: Math.random() * 0.7 + 0.25,
-                hue: Math.random() < 0.4 ? 42 : (Math.random() < 0.75 ? 24 : 12),
-                decay: Math.random() * 0.0025 + 0.0012,
+                opacity: Math.random() * 0.75 + 0.25,
+                isGold: Math.random() < 0.65,
+                decay: Math.random() * 0.0022 + 0.001,
                 wobble: Math.random() * Math.PI * 2
             };
         }
 
-        createPortalStreamEmber() {
+        createVortexEmber() {
+            const angle = Math.random() * Math.PI * 2;
+            const radiusX = Math.random() * 260 + 110;
+            const radiusY = radiusX * (0.35 + Math.random() * 0.2);
+            return {
+                angle: angle,
+                speed: (Math.random() * 0.02 + 0.01) * (Math.random() < 0.5 ? 1 : -1),
+                radiusX: radiusX,
+                radiusY: radiusY,
+                radius: Math.random() * 3.4 + 1.2,
+                opacity: Math.random() * 0.7 + 0.3,
+                decay: Math.random() * 0.0025 + 0.001,
+                isGold: Math.random() < 0.7
+            };
+        }
+
+        createSmokePuff(initial = false) {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            return {
+                x: Math.random() * w,
+                y: initial ? Math.random() * h : h + Math.random() * 50,
+                radius: Math.random() * 120 + 70,
+                speedY: Math.random() * 0.35 + 0.15,
+                speedX: (Math.random() - 0.5) * 0.3,
+                opacity: Math.random() * 0.65 + 0.2,
+                growRate: Math.random() * 0.05 + 0.02,
+                decay: Math.random() * 0.0012 + 0.0006
+            };
+        }
+
+        createFissureEmber() {
             const cx = window.innerWidth / 2;
             const cy = window.innerHeight / 2;
-            const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 3.8 + 1.2;
+            const angle = (Math.random() - 0.5) * Math.PI * 1.8;
+            const speed = Math.random() * 7.0 + 2.2;
             return {
-                x: cx + (Math.random() - 0.5) * 20,
-                y: cy + (Math.random() - 0.5) * 180,
-                vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 2,
-                vy: Math.sin(angle) * speed - Math.random() * 1.5,
-                radius: Math.random() * 2.8 + 1.2,
+                x: cx + (Math.random() - 0.5) * 15,
+                y: cy + (Math.random() - 0.5) * 160,
+                vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 3,
+                vy: Math.sin(angle) * speed - Math.random() * 2,
+                radius: Math.random() * 4.0 + 1.6,
                 opacity: 1.0,
-                hue: Math.random() < 0.5 ? 44 : 26,
-                decay: Math.random() * 0.012 + 0.006
+                isGold: Math.random() < 0.6,
+                decay: Math.random() * 0.016 + 0.009
             };
         }
 
         /**
-         * THE MASK GATE OPENING:
-         * Splits the mask down the middle and swings open both door halves in 3D perspective!
+         * CINEMATIC SEQUENCE ORCHESTRATION
          */
-        triggerGateOpen() {
-            if (this.gateOpened) return;
-            this.gateOpened = true;
+        playIntro() {
+            if (!this.overlay) return;
+            this.isOpen = true;
+            this.isPlaying = true;
+            this.isTransitioning = false;
+            this.maskSplitOccurred = false;
+            this.fissureEmbers = [];
 
-            // 1. Hide hero video and wrap, activate the split slider gate doors
-            if (this.videoWrap) {
-                this.videoWrap.classList.add('hidden');
+            this.overlay.classList.add('active');
+            this.resetAnimationState();
+
+            this.resizeCanvas();
+            this.startRenderLoop();
+
+            // 1. Play Background Video Layers in cinematic slow-motion (playbackRate 0.8)
+            if (this.heroVideo) {
+                this.heroVideo.playbackRate = 0.8;
+                this.heroVideo.currentTime = 0;
+                this.heroVideo.play().catch(() => {});
+            }
+
+            if (this.ambientVideo) {
+                this.ambientVideo.playbackRate = 0.8;
+                this.ambientVideo.currentTime = 0;
+                this.ambientVideo.play().catch(() => {});
+            }
+
+            // 2. Continuous Background Music
+            if (this.bgmAudio) {
+                this.bgmAudio.loop = true;
+                this.bgmAudio.currentTime = 0;
+                if (this.isSoundEnabled) {
+                    this.bgmAudio.play().catch(() => {});
+                }
+            }
+
+            this.updateMuteButton();
+            this.clearTimelineTimers();
+
+            // TIMELINE STEP 1: 5.0s — Center Fissure Cracks Ignite
+            this.scheduleTimeline(() => {
+                if (!this.isOpen || this.isTransitioning) return;
+                if (this.crackOverlay) {
+                    this.crackOverlay.classList.add('ignite');
+                }
+            }, 5000);
+
+            // TIMELINE STEP 2: 5.8s — MAIN CINEMATIC MOMENT: THE MASK SPLITS OPEN!
+            this.scheduleTimeline(() => {
+                if (!this.isOpen || this.isTransitioning) return;
+                this.triggerMaskSplit();
+            }, 5800);
+
+            // TIMELINE STEP 3: 7.2s — SANSKRIT REVEAL ("अंतः अस्ति प्रारंभ")
+            this.scheduleTimeline(() => {
+                if (!this.isOpen || this.isTransitioning) return;
+                if (this.sanskritContainer) {
+                    this.sanskritContainer.classList.add('revealed');
+                }
+            }, 7200);
+
+            // TIMELINE STEP 4: 10.4s — SANSKRIT ASCENDS & MIRAI SCHOOL OF TECHNOLOGY EMERGES
+            this.scheduleTimeline(() => {
+                if (!this.isOpen || this.isTransitioning) return;
+                if (this.sanskritContainer) {
+                    this.sanskritContainer.classList.add('fade-up');
+                }
+                if (this.brandContainer) {
+                    this.brandContainer.classList.add('revealed');
+                }
+            }, 10400);
+        }
+
+        /**
+         * THE MASK SPLIT EVENT:
+         * - Camera Shake
+         * - Sub-Bass Audio Impact
+         * - Shockwave Explosion
+         * - Left & Right Halves Part with 3D Depth
+         * - Inner Sanctum Revealed
+         */
+        triggerMaskSplit() {
+            if (this.maskSplitOccurred) return;
+            this.maskSplitOccurred = true;
+
+            // 1. Camera Shake on Stage
+            if (this.stage) {
+                this.stage.classList.add('camera-shake');
+                setTimeout(() => {
+                    if (this.stage) this.stage.classList.remove('camera-shake');
+                }, 750);
+            }
+
+            // 2. Shockwave Ring Expansion
+            if (this.shockwaveRing) {
+                this.shockwaveRing.classList.remove('fire');
+                void this.shockwaveRing.offsetWidth;
+                this.shockwaveRing.classList.add('fire');
+            }
+
+            // 4. Hide Solid Mask & Hero Video, Reveal Left & Right Mask Halves
+            if (this.maskSolid) {
+                this.maskSolid.classList.add('hidden');
             }
             if (this.heroVideo) {
-                this.heroVideo.classList.add('hidden');
                 this.heroVideo.pause();
             }
-            if (this.gateDoors) {
-                this.gateDoors.classList.add('active');
-                void this.gateDoors.offsetWidth; // Force CSS reflow
-                this.gateDoors.classList.add('opening');
+
+            if (this.maskLeft) {
+                this.maskLeft.classList.add('active', 'opening');
+            }
+            if (this.maskRight) {
+                this.maskRight.classList.add('active', 'opening');
             }
 
-            // 2. Stream portal embers bursting forward out of the center crevice
-            for (let i = 0; i < 50; i++) {
-                this.portalEmbers.push(this.createPortalStreamEmber());
+            // 5. Activate Inner Sanctum Backing Aura
+            if (this.innerSanctum) {
+                this.innerSanctum.classList.add('revealed');
             }
 
-            // 3. Orange fire text in center layer emerges from behind the parting sliding doors
-            clearTimeout(this.textEmergeTimeout);
-            this.textEmergeTimeout = setTimeout(() => {
-                if (this.isOpen && !this.isTransitioning && this.fireTextReveal) {
-                    this.fireTextReveal.classList.add('gate-emerge');
-                }
-            }, 350);
+            // 6. Spawn burst of 90+ fiery fissure embers exploding outward
+            for (let i = 0; i < 90; i++) {
+                this.fissureEmbers.push(this.createFissureEmber());
+            }
+        }
+
+        scheduleTimeline(callback, delay) {
+            const tid = setTimeout(callback, delay);
+            this.timelineTimeouts.push(tid);
+        }
+
+        clearTimelineTimers() {
+            this.timelineTimeouts.forEach(tid => clearTimeout(tid));
+            this.timelineTimeouts = [];
+        }
+
+        resetAnimationState() {
+            this.clearTimelineTimers();
+
+            if (this.stage) {
+                this.stage.classList.remove('camera-shake');
+                this.stage.style.transform = '';
+            }
+
+            if (this.maskSolid) {
+                this.maskSolid.classList.remove('hidden');
+            }
+
+            if (this.crackOverlay) {
+                this.crackOverlay.classList.remove('ignite');
+            }
+
+            if (this.maskLeft) {
+                this.maskLeft.classList.remove('active', 'opening');
+            }
+
+            if (this.maskRight) {
+                this.maskRight.classList.remove('active', 'opening');
+            }
+
+            if (this.shockwaveRing) {
+                this.shockwaveRing.classList.remove('fire');
+            }
+
+            if (this.innerSanctum) {
+                this.innerSanctum.classList.remove('revealed');
+            }
+
+            if (this.sanskritContainer) {
+                this.sanskritContainer.classList.remove('revealed', 'fade-up');
+            }
+
+            if (this.brandContainer) {
+                this.brandContainer.classList.remove('revealed');
+            }
         }
 
         startRenderLoop() {
@@ -207,45 +471,93 @@
 
         updateParallax() {
             if (!this.stage) return;
-            this.currentTiltX += (this.mouseY * 4 - this.currentTiltX) * 0.06;
-            this.currentTiltY += (this.mouseX * 6 - this.currentTiltY) * 0.06;
+            this.currentTiltX += (this.mouseY * 3.5 - this.currentTiltX) * 0.06;
+            this.currentTiltY += (this.mouseX * 5.5 - this.currentTiltY) * 0.06;
             this.stage.style.transform = `perspective(1400px) rotateX(${-this.currentTiltX.toFixed(2)}deg) rotateY(${this.currentTiltY.toFixed(2)}deg)`;
         }
 
+        /**
+         * ULTRA-HIGH FPS PARTICLES RENDER PIPELINE:
+         * Uses fast GPU texture blits with offscreen pre-rendered sprites and additive blending!
+         */
         updateAndDrawScene() {
             if (!this.ctx || !this.canvas) return;
             const ctx = this.ctx;
             const w = window.innerWidth;
             const h = window.innerHeight;
+            const cx = w * 0.5;
+            const cy = h * 0.5;
 
             ctx.clearRect(0, 0, w, h);
 
-            // 1. Ambient rising fire embers
+            // 1. Draw Background Smoke Clouds (Zero-radial-gradient blits!)
+            if (this.spriteSmoke) {
+                for (let i = 0; i < this.smokePuffs.length; i++) {
+                    const s = this.smokePuffs[i];
+                    s.y -= s.speedY;
+                    s.x += s.speedX;
+                    s.radius += s.growRate;
+                    s.opacity -= s.decay;
+
+                    if (s.y < -s.radius || s.opacity <= 0) {
+                        this.smokePuffs[i] = this.createSmokePuff(false);
+                        continue;
+                    }
+
+                    ctx.globalAlpha = Math.max(0, s.opacity);
+                    const diameter = s.radius * 2;
+                    ctx.drawImage(this.spriteSmoke, s.x - s.radius, s.y - s.radius, diameter, diameter);
+                }
+            }
+
+            // 2. Switch to Hardware-Accelerated Additive Blending for Incandescent Fire Particles
+            ctx.globalCompositeOperation = 'lighter';
+
+            // 2a. Swirling Vortex Embers (Orbiting the mask in 3D during emergence)
+            if (!this.maskSplitOccurred && (this.spriteGold || this.spriteRed)) {
+                for (let i = 0; i < this.vortexEmbers.length; i++) {
+                    const ve = this.vortexEmbers[i];
+                    ve.angle += ve.speed;
+                    ve.opacity -= ve.decay;
+
+                    if (ve.opacity <= 0) {
+                        this.vortexEmbers[i] = this.createVortexEmber();
+                        continue;
+                    }
+
+                    const px = cx + Math.cos(ve.angle) * ve.radiusX;
+                    const py = cy + Math.sin(ve.angle) * ve.radiusY;
+                    const size = ve.radius * 2.4;
+                    const sprite = ve.isGold ? this.spriteGold : this.spriteRed;
+
+                    ctx.globalAlpha = Math.max(0, ve.opacity);
+                    ctx.drawImage(sprite, px - size * 0.5, py - size * 0.5, size, size);
+                }
+            }
+
+            // 2b. Ambient Floating Embers
             for (let i = 0; i < this.ambientEmbers.length; i++) {
                 const p = this.ambientEmbers[i];
-                p.wobble += 0.03;
+                p.wobble += 0.035;
                 p.y -= p.speedY;
-                p.x += p.speedX + Math.sin(p.wobble) * 0.4;
+                p.x += p.speedX + Math.sin(p.wobble) * 0.45;
                 p.opacity -= p.decay;
 
-                if (p.y < -15 || p.opacity <= 0) {
-                    this.ambientEmbers[i] = this.createEmber(false);
+                if (p.y < -20 || p.opacity <= 0) {
+                    this.ambientEmbers[i] = this.createAmbientEmber(false);
                     continue;
                 }
 
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${p.hue}, 95%, 60%, ${p.opacity})`;
-                ctx.shadowColor = `hsla(${p.hue}, 100%, 50%, 0.8)`;
-                ctx.shadowBlur = p.radius * 3;
-                ctx.fill();
-                ctx.restore();
+                const size = p.radius * 2.8;
+                const sprite = p.isGold ? this.spriteGold : this.spriteRed;
+
+                ctx.globalAlpha = Math.max(0, p.opacity);
+                ctx.drawImage(sprite, p.x - size * 0.5, p.y - size * 0.5, size, size);
             }
 
-            // 2. Portal Stream Embers (emerging through the opening gate)
-            for (let i = this.portalEmbers.length - 1; i >= 0; i--) {
-                const pe = this.portalEmbers[i];
+            // 2c. Fissure Explosion Embers (Burst from mask opening)
+            for (let i = this.fissureEmbers.length - 1; i >= 0; i--) {
+                const pe = this.fissureEmbers[i];
                 pe.x += pe.vx;
                 pe.y += pe.vy;
                 pe.vx *= 0.985;
@@ -253,19 +565,20 @@
                 pe.opacity -= pe.decay;
 
                 if (pe.opacity <= 0) {
-                    this.portalEmbers.splice(i, 1);
+                    this.fissureEmbers.splice(i, 1);
                     continue;
                 }
 
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(pe.x, pe.y, pe.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${pe.hue}, 100%, 65%, ${pe.opacity})`;
-                ctx.shadowColor = `hsla(${pe.hue}, 100%, 50%, 0.9)`;
-                ctx.shadowBlur = pe.radius * 4;
-                ctx.fill();
-                ctx.restore();
+                const size = pe.radius * 3.2;
+                const sprite = pe.isGold ? this.spriteGold : this.spriteRed;
+
+                ctx.globalAlpha = Math.max(0, pe.opacity);
+                ctx.drawImage(sprite, pe.x - size * 0.5, pe.y - size * 0.5, size, size);
             }
+
+            // Reset composite mode & alpha
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1.0;
         }
 
         bindEvents() {
@@ -295,89 +608,6 @@
                     }
                 }
             });
-
-            if (this.heroVideo) {
-                this.heroVideo.addEventListener('timeupdate', () => {
-                    if (!this.gateOpened && this.heroVideo.currentTime >= 2.8) {
-                        this.triggerGateOpen();
-                    }
-                });
-                this.heroVideo.addEventListener('ended', () => {
-                    if (!this.gateOpened) {
-                        this.triggerGateOpen();
-                    }
-                });
-            }
-        }
-
-        playIntro() {
-            if (!this.overlay) return;
-            this.isOpen = true;
-            this.isPlaying = true;
-            this.isTransitioning = false;
-            this.gateOpened = false;
-            this.portalEmbers = [];
-            this.overlay.classList.add('active');
-
-            // Reset animation state cleanly
-            this.resetAnimationState();
-
-            this.resizeCanvas();
-            this.startRenderLoop();
-
-            // Smooth Slow-Motion Video Playback (rate 0.75)
-            if (this.heroVideo) {
-                this.heroVideo.playbackRate = 0.75;
-                this.heroVideo.currentTime = 0;
-                this.heroVideo.play().catch(e => console.warn('Hero video note:', e));
-            }
-
-            if (this.ambientVideo) {
-                this.ambientVideo.playbackRate = 0.75;
-                this.ambientVideo.currentTime = 0;
-                this.ambientVideo.play().catch(e => console.warn('Ambient video note:', e));
-            }
-
-            // Continuous Background Music
-            if (this.bgmAudio) {
-                this.bgmAudio.loop = true;
-                this.bgmAudio.currentTime = 0;
-                if (this.isSoundEnabled) {
-                    this.bgmAudio.play().catch(e => console.warn('BGM audio note:', e));
-                }
-            }
-
-            // Trigger the Mask Gate Opening at peak slow-motion approach (~3.0s)
-            clearTimeout(this.gateTimeout);
-            this.gateTimeout = setTimeout(() => {
-                if (this.isOpen && !this.isTransitioning && !this.gateOpened) {
-                    this.triggerGateOpen();
-                }
-            }, 3000);
-
-            this.updateMuteButton();
-        }
-
-        resetAnimationState() {
-            if (this.videoWrap) {
-                this.videoWrap.classList.remove('hidden');
-            }
-
-            if (this.heroVideo) {
-                this.heroVideo.classList.remove('hidden');
-            }
-
-            if (this.gateDoors) {
-                this.gateDoors.classList.remove('active', 'opening');
-            }
-
-            if (this.fireTextReveal) {
-                this.fireTextReveal.classList.remove('gate-emerge');
-            }
-
-            if (this.stage) {
-                this.stage.style.transform = '';
-            }
         }
 
         togglePlayPause() {
@@ -428,24 +658,16 @@
         enterDashboardWithTransition() {
             if (this.isTransitioning) return;
             this.isTransitioning = true;
-            clearTimeout(this.gateTimeout);
-            clearTimeout(this.textEmergeTimeout);
+            this.clearTimelineTimers();
 
-            // 1. Reveal Portal Gateway Overlay
+            // 1. Reveal Portal Gateway Transition Overlay
             if (this.portalOverlay) {
                 this.portalOverlay.classList.add('portal-active');
             }
 
-            // 2. Play temple bell / chime if available
-            try {
-                if (window.miraiAudio && typeof window.miraiAudio.playTempleBell === 'function') {
-                    window.miraiAudio.playTempleBell();
-                }
-            } catch (e) {}
-
-            // 3. Smooth audio fade out only when entering dashboard
+            // 2. Smooth audio fade out
             if (this.bgmAudio && !this.bgmAudio.paused) {
-                const fadeSteps = 7;
+                const fadeSteps = 8;
                 let currentStep = 0;
                 const initialVol = this.bgmAudio.volume;
                 const fadeInterval = setInterval(() => {
@@ -456,7 +678,7 @@
                         this.bgmAudio.pause();
                         this.bgmAudio.volume = initialVol;
                     }
-                }, 100);
+                }, 90);
             }
 
             if (this.heroVideo) this.heroVideo.pause();
@@ -484,7 +706,7 @@
                     this.resetAnimationState();
                 }, 400);
 
-            }, 1150);
+            }, 1100);
         }
     }
 

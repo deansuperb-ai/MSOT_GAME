@@ -1,12 +1,6 @@
 /* ==========================================================================
-   MIRAI SCHOOL OF TECHNOLOGY — ASUR GUARDIAN PROTOCOL CINEMATIC INTRO
-   High-FPS Smooth Video Playback & 3D Voxel Cube Disintegration:
-   1. Ultra-Smooth 60FPS Video Playback with GPU hardware acceleration
-   2. Synchronized ambient real-time video backlighting
-   3. Volumetric god rays, anamorphic lens flare, incandescent demonic eye flares
-   4. NO BLAST: Mask smoothly fragments into hundreds of small 3D glowing cubes
-      that spread everywhere in 3D perspective
-   5. Dynamic burning text POP-UP emergence from the dispersing cubes
+   MIRAI SCHOOL OF TECHNOLOGY — CINEMATIC GUARDIAN PROTOCOL INTRO
+   Sacred Mask Split & Sanskrit Reveal ("अंतः अस्ति प्रारंभ")
    ========================================================================== */
 
 .msot-intro-overlay {
@@ -14,7 +8,7 @@
     inset: 0;
     width: 100vw;
     height: 100vh;
-    background: #020204;
+    background: #000000;
     z-index: 999999;
     display: flex;
     flex-direction: column;
@@ -36,7 +30,7 @@
 }
 
 /* ==========================================================================
-   1. REAL-TIME AMBIENT SYNCHRONIZED VIDEO BACKLIGHTING & DEPTH
+   1. REAL-TIME AMBIENT SYNCHRONIZED VIDEO & CRIMSON BACKDROP
    ========================================================================== */
 .msot-intro-ambient-bg {
     position: absolute;
@@ -46,7 +40,7 @@
     pointer-events: none;
     z-index: 1;
     overflow: hidden;
-    background: radial-gradient(circle at center, rgba(30, 8, 4, 0.85) 0%, rgba(2, 2, 4, 0.98) 75%, #020204 100%);
+    background: radial-gradient(circle at center, rgba(40, 6, 8, 0.85) 0%, rgba(10, 2, 4, 0.98) 75%, #000000 100%);
     will-change: transform;
     transform: translate3d(0, 0, 0);
 }
@@ -57,24 +51,35 @@
     width: 140%;
     height: 140%;
     object-fit: cover;
-    filter: blur(65px) brightness(0.4) saturate(2.4);
+    filter: blur(65px) brightness(0.35) saturate(2.4);
     transform: scale(1.15) translate3d(0, 0, 0);
-    opacity: 0.85;
+    opacity: 0.8;
     pointer-events: none;
     will-change: transform;
     backface-visibility: hidden;
+}
+
+/* Deep Crimson Textured Backdrop matching the reference artwork */
+.msot-intro-crimson-backdrop {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(145, 15, 20, 0.72) 0%, rgba(75, 5, 8, 0.9) 45%, #040102 100%);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.88;
 }
 
 .msot-intro-cinematic-glow {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 2;
-    background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(255, 85, 0, 0.16) 0%, rgba(180, 25, 0, 0.08) 45%, transparent 80%);
+    z-index: 3;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255, 75, 0, 0.18) 0%, rgba(185, 28, 28, 0.1) 45%, transparent 80%);
 }
 
 /* ==========================================================================
-   2. VOLUMETRIC GOD RAYS & REALISTIC 3D PERSPECTIVE CINEMA STAGE
+   2. VOLUMETRIC GOD RAYS & REALISTIC 3D CINEMA STAGE
    ========================================================================== */
 .msot-intro-stage {
     position: relative;
@@ -83,7 +88,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 4;
+    z-index: 5;
     overflow: hidden;
     perspective: 1400px;
     transform-style: preserve-3d;
@@ -91,61 +96,431 @@
     will-change: transform;
 }
 
+/* Cinematic Camera Shake at Split Impact */
+.msot-intro-stage.camera-shake {
+    animation: cinematicCameraShake 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes cinematicCameraShake {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    10% { transform: translate3d(-6px, 4px, 0) rotate(-0.5deg); }
+    25% { transform: translate3d(7px, -5px, 0) rotate(0.4deg); }
+    40% { transform: translate3d(-5px, -3px, 0) rotate(-0.3deg); }
+    55% { transform: translate3d(4px, 3px, 0) rotate(0.2deg); }
+    70% { transform: translate3d(-2px, 1px, 0) rotate(-0.1deg); }
+    85% { transform: translate3d(1px, -1px, 0) rotate(0deg); }
+}
+
 /* Rotating Volumetric God Rays */
 .msot-volumetric-rays {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 1200px;
-    height: 1200px;
-    margin-top: -600px;
-    margin-left: -600px;
+    width: 1300px;
+    height: 1300px;
+    margin-top: -650px;
+    margin-left: -650px;
     border-radius: 50%;
     background: conic-gradient(
         from 0deg,
         rgba(255, 107, 0, 0) 0deg,
-        rgba(255, 140, 0, 0.12) 20deg,
+        rgba(255, 140, 0, 0.14) 20deg,
         rgba(255, 107, 0, 0) 40deg,
-        rgba(255, 69, 0, 0.1) 80deg,
+        rgba(220, 38, 38, 0.12) 80deg,
         rgba(255, 107, 0, 0) 110deg,
-        rgba(255, 180, 0, 0.14) 150deg,
+        rgba(255, 180, 0, 0.16) 150deg,
         rgba(255, 107, 0, 0) 180deg,
-        rgba(255, 90, 0, 0.11) 220deg,
+        rgba(255, 90, 0, 0.13) 220deg,
         rgba(255, 107, 0, 0) 250deg,
-        rgba(255, 150, 0, 0.15) 290deg,
+        rgba(255, 150, 0, 0.16) 290deg,
         rgba(255, 107, 0, 0) 330deg,
         rgba(255, 107, 0, 0) 360deg
     );
-    filter: blur(28px);
+    filter: blur(32px);
     mix-blend-mode: screen;
     pointer-events: none;
-    z-index: 5;
-    opacity: 0.7;
-    animation: volumetricRaysRotate 35s linear infinite;
+    z-index: 6;
+    opacity: 0.75;
+    animation: volumetricRaysRotate 40s linear infinite;
     will-change: transform;
 }
 
 @keyframes volumetricRaysRotate {
     0% { transform: rotate(0deg) scale(0.95); }
-    50% { transform: rotate(180deg) scale(1.1); }
+    50% { transform: rotate(180deg) scale(1.12); }
     100% { transform: rotate(360deg) scale(0.95); }
 }
 
-/* ==========================================================================
-   3. THE ASUR MASK VIDEO STAGE — CENTERED & CINEMATIC SLOW-MOTION
-   ========================================================================== */
-.msot-intro-mask-container {
+/* Particle Canvas Layer */
+.msot-mask-canvas-layer {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     pointer-events: none;
-    z-index: 25; /* LAYER: GATE IS ON TOP OF TEXT */
+    z-index: 12;
 }
 
-/* Video Wrap playing slow-motion approach */
-.msot-mask-video-wrap {
+/* ==========================================================================
+   3. INNER SANCTUM — SANSKRIT & BRAND REVEALS (BEHIND THE MASK)
+   ========================================================================== */
+.msot-inner-sanctum {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 94%;
+    max-width: 980px;
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 15; /* Sits behind the mask halves (z-index 25) */
+    pointer-events: none;
+}
+
+/* Shockwave Ring at Mask Split Moment */
+.msot-shockwave-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 235, 180, 0.95);
+    box-shadow: 0 0 45px #ffedd5, 0 0 90px #f59e0b, 0 0 160px #ea580c, inset 0 0 45px #f59e0b;
+    pointer-events: none;
+    z-index: 14;
+    opacity: 0;
+}
+
+.msot-shockwave-ring.fire {
+    animation: shockwaveExpand 1.6s cubic-bezier(0.12, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes shockwaveExpand {
+    0% {
+        transform: translate(-50%, -50%) scale(0.05);
+        opacity: 1;
+        border-width: 8px;
+    }
+    40% {
+        opacity: 0.9;
+        border-width: 4px;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(4.2);
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+/* Sanctum Fiery Ambient Aura */
+.msot-sanctum-fire-aura {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 130%;
+    height: 380px;
+    background: radial-gradient(ellipse at center, rgba(255, 107, 0, 0.58) 0%, rgba(220, 38, 38, 0.35) 45%, transparent 75%);
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(45px);
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.msot-inner-sanctum.revealed .msot-sanctum-fire-aura {
+    opacity: 1;
+    animation: sanctumAuraBreathe 3s infinite alternate ease-in-out;
+}
+
+@keyframes sanctumAuraBreathe {
+    0% { transform: translate(-50%, -50%) scale(0.94); opacity: 0.75; }
+    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; filter: blur(55px); }
+}
+
+/* ==========================================================================
+   4. SANSKRIT TEXT REVEAL ("अंतः अस्ति प्रारंभ") — PHASE 1
+   ========================================================================== */
+.msot-sanskrit-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+    filter: blur(14px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease;
+}
+
+.msot-sanskrit-container.revealed {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.msot-sanskrit-container.fade-up {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translate(-50%, -68%) scale(1.05);
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Radiance behind the Sanskrit Inscription */
+.msot-sanskrit-radiance {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 180px;
+    background: radial-gradient(ellipse at center, rgba(255, 180, 50, 0.45) 0%, rgba(234, 88, 12, 0.22) 50%, transparent 80%);
+    filter: blur(35px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Sanskrit Sacred Devanagari Typography */
+.msot-sanskrit-inscription {
+    font-family: 'Yatra One', 'Rozha One', 'Noto Serif Devanagari', 'Cinzel', serif;
+    font-size: clamp(42px, 7vw, 76px);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-align: center;
+    color: #ffffff;
+    /* Molten gold forging gradient */
+    background: linear-gradient(180deg, #ffffff 0%, #fffbeb 24%, #fef08a 48%, #f59e0b 76%, #b45309 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.98))
+            drop-shadow(0 0 28px rgba(245, 158, 11, 0.95))
+            drop-shadow(0 0 65px rgba(220, 38, 38, 0.7));
+    position: relative;
+    white-space: nowrap;
+}
+
+.sanskrit-char {
+    display: inline-block;
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+/* English Translation Subtitle matching reference: "END IS THE NEW BEGINNING" */
+.msot-sanskrit-sub {
+    font-family: 'Cinzel', 'Trajan Pro', 'Noto Serif JP', serif;
+    font-size: clamp(13px, 2.2vw, 19px);
+    font-weight: 700;
+    letter-spacing: 0.38em;
+    color: #fef3c7;
+    text-transform: uppercase;
+    margin-top: 18px;
+    opacity: 0.92;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 22px rgba(245, 158, 11, 0.85);
+}
+
+.msot-sanskrit-ember-line {
+    width: 140px;
+    height: 2px;
+    margin-top: 14px;
+    background: linear-gradient(90deg, transparent 0%, #fbbf24 50%, transparent 100%);
+    box-shadow: 0 0 16px #f59e0b, 0 0 30px #ea580c;
+}
+
+/* ==========================================================================
+   5. BRAND REVEAL & OPEN DASHBOARD BUTTON — PHASE 2
+   ========================================================================== */
+.msot-brand-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.94);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+    filter: blur(14px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s ease;
+}
+
+.msot-brand-container.revealed {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.msot-brand-molten-aura {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 110%;
+    height: 220px;
+    background: radial-gradient(ellipse at center, rgba(255, 120, 0, 0.5) 0%, rgba(220, 38, 38, 0.28) 45%, transparent 75%);
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Fire-Forged Brand Typography: "MIRAI SCHOOL OF TECHNOLOGY" */
+.msot-brand-title {
+    font-family: 'Cinzel', 'Outfit', 'Inter', sans-serif;
+    font-size: clamp(34px, 5.5vw, 64px);
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    margin: 0;
+    line-height: 1.15;
+    text-transform: uppercase;
+    text-align: center;
+    background: linear-gradient(180deg, #ffffff 0%, #fffbeb 26%, #fef08a 52%, #f59e0b 80%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.98))
+            drop-shadow(0 0 28px rgba(245, 158, 11, 0.95))
+            drop-shadow(0 0 70px rgba(234, 88, 12, 0.7));
+    position: relative;
+    padding: 0 10px;
+    animation: titleFirePulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes titleFirePulse {
+    0% {
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.95))
+                drop-shadow(0 0 24px rgba(245, 158, 11, 0.85))
+                drop-shadow(0 0 55px rgba(234, 88, 12, 0.6));
+    }
+    100% {
+        filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 1))
+                drop-shadow(0 0 38px rgba(251, 191, 36, 1))
+                drop-shadow(0 0 90px rgba(245, 158, 11, 0.9));
+    }
+}
+
+/* Cinematic Light Sweep Across Brand Name */
+.msot-brand-light-sweep {
+    position: absolute;
+    top: 25%;
+    left: -60%;
+    width: 50%;
+    height: 40px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.75) 50%, transparent 100%);
+    filter: blur(6px);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    transform: skewX(-25deg);
+    animation: brandLightSweep 4s infinite cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+@keyframes brandLightSweep {
+    0% { left: -60%; }
+    40% { left: 130%; }
+    100% { left: 130%; }
+}
+
+/* ==========================================================================
+   6. ⚔ OPEN DASHBOARD ⚔ BUTTON — MASTER INTERACTIVE DESIGN
+   ========================================================================== */
+.msot-open-dashboard-btn {
+    appearance: none;
+    position: relative;
+    margin-top: 28px;
+    padding: 16px 48px;
+    border-radius: 999px;
+    background: radial-gradient(circle at center, #180c10 0%, #090305 100%);
+    border: 1.5px solid rgba(245, 158, 11, 0.85);
+    color: #ffffff;
+    font-family: 'JetBrains Mono', 'Cinzel', monospace;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 107, 0, 0.7),
+                0 0 70px rgba(220, 38, 38, 0.45),
+                inset 0 0 16px rgba(245, 158, 11, 0.25),
+                0 6px 20px rgba(0, 0, 0, 0.85);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(1);
+}
+
+/* Animated Flowing Fire Border */
+.msot-open-dashboard-btn::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f59e0b, #ef4444, #fbbf24, #ea580c, #f59e0b);
+    background-size: 300% 300%;
+    z-index: -1;
+    opacity: 0.7;
+    animation: fireBorderFlow 4s linear infinite;
+    filter: blur(2px);
+}
+
+@keyframes fireBorderFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.msot-open-dashboard-btn .btn-text {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(180deg, #ffffff 0%, #fffbeb 40%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 18px rgba(245, 158, 11, 0.85);
+}
+
+.msot-open-dashboard-btn:hover {
+    transform: scale(1.07);
+    border-color: #ffffff;
+    box-shadow: 0 0 55px rgba(255, 140, 0, 1),
+                0 0 110px rgba(239, 68, 68, 0.85),
+                inset 0 0 25px rgba(251, 191, 36, 0.5),
+                0 8px 30px rgba(0, 0, 0, 0.95);
+}
+
+.msot-open-dashboard-btn:active {
+    transform: scale(0.98);
+}
+
+/* ==========================================================================
+   7. MASK VIEWPORT & 3D SPLIT MECHANISM (FOREGROUND LAYER)
+   ========================================================================== */
+.msot-mask-viewport {
+    position: absolute;
+    width: min(84vw, 760px);
+    aspect-ratio: 1024 / 602;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 25; /* Foreground layer above text */
+    perspective: 1400px;
+    transform-style: preserve-3d;
+}
+
+/* Solid Mask (Emerges from darkness 0-5s with 3D Cinematic Dolly Zoom) */
+.msot-mask-solid {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -154,112 +529,216 @@
     align-items: center;
     justify-content: center;
     pointer-events: none;
-    transition: opacity 0.25s ease-out;
+    will-change: transform, opacity, filter;
+    transform-style: preserve-3d;
+    animation: maskCinematicEmergence 5.0s cubic-bezier(0.16, 0.85, 0.25, 1) forwards;
 }
 
-.msot-mask-video-wrap.hidden {
+.msot-mask-solid.hidden {
     opacity: 0;
     visibility: hidden;
-    pointer-events: none;
     display: none;
 }
 
-/* Mask Hero Video Element */
+/* Dynamic 3D Camera Dolly Zoom & Dramatic Emergence */
+@keyframes maskCinematicEmergence {
+    0% {
+        transform: perspective(1400px) translate3d(0, 50px, -240px) rotateX(12deg) rotateY(-8deg) scale(0.68);
+        opacity: 0;
+        filter: brightness(0.12) contrast(1.4) drop-shadow(0 0 15px rgba(0, 0, 0, 0.95));
+    }
+    22% {
+        transform: perspective(1400px) translate3d(-14px, 22px, -130px) rotateX(6deg) rotateY(6deg) scale(0.8);
+        opacity: 0.72;
+        filter: brightness(0.65) contrast(1.3) drop-shadow(0 0 45px rgba(234, 88, 12, 0.65));
+    }
+    52% {
+        transform: perspective(1400px) translate3d(10px, -6px, -30px) rotateX(-2deg) rotateY(-3deg) scale(0.93);
+        opacity: 0.96;
+        filter: brightness(0.95) contrast(1.18) drop-shadow(0 0 70px rgba(245, 158, 11, 0.85));
+    }
+    78% {
+        transform: perspective(1400px) translate3d(-4px, -2px, 20px) rotateX(1deg) rotateY(2deg) scale(1.01);
+        opacity: 1;
+        filter: brightness(1.08) contrast(1.12) drop-shadow(0 0 90px rgba(245, 158, 11, 0.95));
+    }
+    100% {
+        transform: perspective(1400px) translate3d(0, 0, 32px) rotateX(0deg) rotateY(0deg) scale(1.04);
+        opacity: 1;
+        filter: brightness(1.14) contrast(1.1) drop-shadow(0 0 100px rgba(251, 191, 36, 1));
+    }
+}
+
+/* Fiery Solar Corona Halo Behind Mask */
+.msot-mask-backlight-corona {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255, 140, 0, 0.45) 0%, rgba(220, 38, 38, 0.28) 45%, transparent 75%);
+    filter: blur(45px);
+    pointer-events: none;
+    z-index: -1;
+    animation: coronaPulsate 3.6s infinite alternate ease-in-out;
+}
+
+@keyframes coronaPulsate {
+    0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.55; }
+    100% { transform: translate(-50%, -50%) scale(1.18); opacity: 0.95; filter: blur(55px); }
+}
+
+/* Mask Video with Organic Floating / Breathing Levitation */
 .msot-hero-mask-video {
-    width: min(84vw, 840px);
-    aspect-ratio: 2828 / 1440;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     display: block;
     border-radius: 8px;
-    filter: drop-shadow(0 0 35px rgba(255, 80, 0, 0.7)) drop-shadow(0 0 75px rgba(245, 158, 11, 0.45));
-    will-change: transform, opacity;
-    animation: maskCenterApproach 3.2s cubic-bezier(0.16, 0.8, 0.25, 1) forwards;
+    will-change: transform;
+    animation: maskBreathingFloat 4s ease-in-out infinite alternate;
 }
 
-@keyframes maskCenterApproach {
-    0% {
-        transform: scale(0.86);
-        opacity: 0.75;
-    }
-    50% {
-        transform: scale(0.98);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(1.03);
-        opacity: 1;
-    }
-}
-
-/* ==========================================================================
-   4. SLIDER GATE DOORS — SPLITS IN MIDDLE & SLIDES LEFT & RIGHT
-   ========================================================================== */
-.msot-mask-slider-gate {
+.msot-mask-fallback-img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    display: none;
+    border-radius: 8px;
+    animation: maskBreathingFloat 4s ease-in-out infinite alternate;
+}
+
+/* Menacing Living Levitation Float */
+@keyframes maskBreathingFloat {
+    0% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    30% {
+        transform: translate3d(-3px, -7px, 6px) rotate(-0.5deg);
+    }
+    60% {
+        transform: translate3d(2px, -12px, 12px) rotate(0.4deg);
+    }
+    100% {
+        transform: translate3d(3px, -5px, 6px) rotate(0.6deg);
+    }
+}
+
+/* Anamorphic Specular Sweep Glint Across Mask Contours */
+.msot-mask-specular-sweep {
+    position: absolute;
+    top: -20%;
+    left: -40%;
+    width: 35%;
+    height: 140%;
+    background: linear-gradient(115deg, transparent 0%, rgba(255, 235, 180, 0.4) 45%, rgba(255, 255, 255, 0.85) 50%, rgba(245, 158, 11, 0.45) 55%, transparent 100%);
+    filter: blur(10px);
+    mix-blend-mode: overlay;
     pointer-events: none;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s ease-out;
+    z-index: 10;
+    transform: rotate(25deg);
+    animation: specularSweepGlint 4.2s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
 }
 
-.msot-mask-slider-gate.active {
-    opacity: 1;
-    visibility: visible;
+@keyframes specularSweepGlint {
+    0% { left: -50%; opacity: 0; }
+    20% { opacity: 0.85; }
+    45% { left: 130%; opacity: 0; }
+    100% { left: 130%; opacity: 0; }
 }
 
-/* Center Energy Laser Crevice */
-.msot-slider-center-seam {
+
+/* ==========================================================================
+   8. CENTER CRACK & FISSURE LIGHTNING OVERLAY (PRE-SPLIT MOMENT)
+   ========================================================================== */
+.msot-crack-overlay {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 50%;
-    width: 3px;
+    width: 8px;
     transform: translateX(-50%);
-    background: linear-gradient(180deg, transparent 0%, #ffedd5 15%, #ffffff 50%, #f59e0b 85%, transparent 100%);
-    box-shadow: 0 0 20px #ffffff, 0 0 45px #ff8c00, 0 0 90px #ea580c;
-    opacity: 0;
     pointer-events: none;
     z-index: 30;
+    opacity: 0;
 }
 
-.msot-mask-slider-gate.opening .msot-slider-center-seam {
-    animation: sliderSeamFlare 1.8s ease-out forwards;
+.msot-crack-overlay.ignite {
+    opacity: 1;
+    animation: crackIgniteFlare 1.4s ease-out forwards;
 }
 
-@keyframes sliderSeamFlare {
+@keyframes crackIgniteFlare {
     0% { opacity: 0; width: 2px; }
-    15% { opacity: 1; width: 14px; filter: blur(1px); }
-    50% { opacity: 0.9; width: 42px; filter: blur(3px); }
-    100% { opacity: 0; width: 90px; filter: blur(6px); }
+    20% { opacity: 1; width: 12px; }
+    55% { opacity: 1; width: 26px; filter: drop-shadow(0 0 25px #ffffff); }
+    100% { opacity: 0; width: 50px; }
 }
 
-/* Slider Door Halves */
-.msot-slider-door {
+.msot-crack-laser-line {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, #ffedd5 15%, #ffffff 50%, #f59e0b 85%, transparent 100%);
+    box-shadow: 0 0 25px #ffffff, 0 0 50px #ff8c00, 0 0 100px #ea580c;
+    border-radius: 999px;
+}
+
+.msot-crack-branch {
+    position: absolute;
+    width: 45px;
+    height: 3px;
+    background: #ffffff;
+    box-shadow: 0 0 15px #ff8c00;
+}
+
+.msot-crack-branch.left {
+    top: 42%;
+    right: 50%;
+    transform: rotate(-25deg);
+}
+
+.msot-crack-branch.right {
+    top: 60%;
+    left: 50%;
+    transform: rotate(20deg);
+}
+
+/* ==========================================================================
+   9. PHYSICAL MASK SPLIT HALVES — LEFT & RIGHT SYMMETRICAL SWING
+   ========================================================================== */
+.msot-mask-half {
     position: absolute;
     top: 0;
     bottom: 0;
     width: 50%;
     height: 100%;
     overflow: hidden;
-    background: #08070b; /* Seamless dark backdrop covers text completely */
-    will-change: transform;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
 }
 
-.msot-slider-door.left {
+.msot-mask-half.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.msot-mask-half.left {
     left: 0;
-    transform: translateX(0);
+    transform-origin: left center;
 }
 
-.msot-slider-door.right {
+.msot-mask-half.right {
     right: 0;
-    transform: translateX(0);
+    transform-origin: right center;
 }
 
-/* Inner full-screen canvas so the mask is centered at 50vw */
-.msot-slider-door-inner {
+.msot-mask-half-inner {
     position: absolute;
     top: 0;
     width: 200%;
@@ -269,225 +748,98 @@
     justify-content: center;
 }
 
-.msot-slider-door.left .msot-slider-door-inner {
+.msot-mask-half.left .msot-mask-half-inner {
     left: 0;
 }
 
-.msot-slider-door.right .msot-slider-door-inner {
+.msot-mask-half.right .msot-mask-half-inner {
     right: 0;
 }
 
-.msot-slider-mask-img {
-    width: min(84vw, 840px);
-    aspect-ratio: 2828 / 1440;
+.msot-split-mask-img {
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     display: block;
-    filter: contrast(1.15) saturate(1.2) brightness(1.05) drop-shadow(0 0 35px rgba(255, 80, 0, 0.7)) drop-shadow(0 0 75px rgba(245, 158, 11, 0.45));
+    filter: contrast(1.15) saturate(1.2) brightness(1.05)
+            drop-shadow(0 0 35px rgba(255, 80, 0, 0.75))
+            drop-shadow(0 0 80px rgba(245, 158, 11, 0.5));
 }
 
-/* Glowing energy edge on parting seam */
-.msot-slider-door-edge {
+/* Molten Sizzling Split Seam Along Parting Edge */
+.msot-split-molten-edge {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 2px;
+    width: 3px;
     z-index: 5;
+    background: linear-gradient(180deg, transparent 0%, #ffedd5 20%, #ffffff 50%, #f59e0b 80%, transparent 100%);
+    box-shadow: 0 0 16px #ffedd5, 0 0 35px #f59e0b, 0 0 70px #dc2626;
 }
 
-.msot-slider-door-edge.edge-right {
+.msot-split-molten-edge.edge-left {
     right: 0;
-    background: linear-gradient(180deg, transparent 0%, #ffedd5 20%, #ffffff 50%, #f59e0b 80%, transparent 100%);
-    box-shadow: 0 0 15px #ffedd5, 0 0 35px #f59e0b, 15px 0 40px rgba(0, 0, 0, 0.95);
 }
 
-.msot-slider-door-edge.edge-left {
+.msot-split-molten-edge.edge-right {
     left: 0;
-    background: linear-gradient(180deg, transparent 0%, #ffedd5 20%, #ffffff 50%, #f59e0b 80%, transparent 100%);
-    box-shadow: 0 0 15px #ffedd5, 0 0 35px #f59e0b, -15px 0 40px rgba(0, 0, 0, 0.95);
 }
 
-/* LEFT SLIDER DOOR SLIDES SMOOTHLY TO THE LEFT */
-.msot-mask-slider-gate.opening .msot-slider-door.left {
-    animation: sliderDoorSlideLeft 2.4s cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
+/* LEFT HALF ANIMATION: Moves Left with 3D Depth & Realistic Easing */
+.msot-mask-half.left.opening {
+    animation: maskSplitLeft 2.8s cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
 }
 
-@keyframes sliderDoorSlideLeft {
+@keyframes maskSplitLeft {
     0% {
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0) rotateY(0deg);
+        opacity: 1;
     }
-    12% {
-        transform: translateX(-4%);
+    14% {
+        transform: translate3d(-6%, 0, 20px) rotateY(-4deg);
     }
     45% {
-        transform: translateX(-38%);
-    }
-    78% {
-        transform: translateX(-80%);
-    }
-    100% {
-        transform: translateX(-102%);
-    }
-}
-
-/* RIGHT SLIDER DOOR SLIDES SMOOTHLY TO THE RIGHT */
-.msot-mask-slider-gate.opening .msot-slider-door.right {
-    animation: sliderDoorSlideRight 2.4s cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
-}
-
-@keyframes sliderDoorSlideRight {
-    0% {
-        transform: translateX(0);
-    }
-    12% {
-        transform: translateX(4%);
-    }
-    45% {
-        transform: translateX(38%);
-    }
-    78% {
-        transform: translateX(80%);
-    }
-    100% {
-        transform: translateX(102%);
-    }
-}
-
-/* ==========================================================================
-   5. FIERY TEXT & DASHBOARD BUTTON IN CENTER (UNDERNEATH SLIDING GATE)
-   ========================================================================== */
-.msot-fire-text-reveal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-    z-index: 10; /* LAYER: UNDERNEATH THE GATE (GATE IS LAYER 25) */
-    text-align: center;
-    width: 95%;
-    max-width: 960px;
-    pointer-events: none;
-    opacity: 0;
-    filter: blur(10px);
-    will-change: transform, opacity, filter;
-}
-
-.msot-fire-text-reveal.gate-emerge {
-    pointer-events: auto;
-    opacity: 1;
-    animation: textRevealUnderSlider 2.4s cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
-}
-
-@keyframes textRevealUnderSlider {
-    0% {
-        opacity: 0.2;
-        transform: translate(-50%, -50%) scale(0.88);
-        filter: blur(12px) brightness(1.8);
-    }
-    35% {
-        opacity: 0.85;
-        transform: translate(-50%, -50%) scale(0.96);
-        filter: blur(4px) brightness(1.3);
+        transform: translate3d(-38%, 0, 55px) rotateY(-15deg);
     }
     75% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.01);
-        filter: blur(0px) brightness(1.05);
+        transform: translate3d(-78%, 0, 80px) rotateY(-22deg);
+        opacity: 0.95;
     }
     100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-        filter: blur(0px) brightness(1);
+        transform: translate3d(-112%, 0, 95px) rotateY(-26deg);
+        opacity: 0.7;
     }
 }
 
-/* Roaring Fire Aura Behind the Text */
-.msot-fire-text-aura {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 140%;
-    height: 340px;
-    background: radial-gradient(ellipse at center, rgba(255, 107, 0, 0.55) 0%, rgba(220, 38, 38, 0.32) 42%, transparent 75%);
-    pointer-events: none;
-    z-index: -1;
-    filter: blur(40px);
-    animation: fireAuraFlicker 2.6s infinite alternate ease-in-out;
+/* RIGHT HALF ANIMATION: Moves Right with 3D Depth & Realistic Easing */
+.msot-mask-half.right.opening {
+    animation: maskSplitRight 2.8s cubic-bezier(0.22, 0.85, 0.32, 1) forwards;
 }
 
-@keyframes fireAuraFlicker {
-    0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.92); }
-    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); filter: blur(50px); }
-}
-
-/* The Glowing Radiant Website Title — Ultra-Visible, High-Contrast & Majestic */
-.msot-fire-website-title {
-    font-family: 'Cinzel', 'Outfit', sans-serif;
-    font-size: clamp(36px, 6vw, 64px);
-    font-weight: 900;
-    letter-spacing: 0.12em;
-    margin: 0;
-    line-height: 1.15;
-    text-transform: uppercase;
-    text-align: center;
-    /* High-contrast pure white-to-bright-gold gradient */
-    background: linear-gradient(180deg, #ffffff 0%, #fffbeb 28%, #fef08a 55%, #f59e0b 82%, #d97706 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /* Crisp dark stroke + intense golden fiery bloom for 100% legibility against dark or light bg */
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.95))
-            drop-shadow(0 0 25px rgba(245, 158, 11, 0.9))
-            drop-shadow(0 0 60px rgba(234, 88, 12, 0.65));
-    animation: titleFireGlowPulse 2.8s infinite alternate ease-in-out;
-}
-
-@keyframes titleFireGlowPulse {
+@keyframes maskSplitRight {
     0% {
-        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.95))
-                drop-shadow(0 0 22px rgba(245, 158, 11, 0.85))
-                drop-shadow(0 0 50px rgba(234, 88, 12, 0.55));
+        transform: translate3d(0, 0, 0) rotateY(0deg);
+        opacity: 1;
+    }
+    14% {
+        transform: translate3d(6%, 0, 20px) rotateY(4deg);
+    }
+    45% {
+        transform: translate3d(38%, 0, 55px) rotateY(15deg);
+    }
+    75% {
+        transform: translate3d(78%, 0, 80px) rotateY(22deg);
+        opacity: 0.95;
     }
     100% {
-        filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 1))
-                drop-shadow(0 0 35px rgba(251, 191, 36, 1))
-                drop-shadow(0 0 80px rgba(245, 158, 11, 0.85));
+        transform: translate3d(112%, 0, 95px) rotateY(26deg);
+        opacity: 0.7;
     }
-}
-
-/* The Enter Button Emerges Out of the Flames */
-.msot-enter-action-btn {
-    appearance: none;
-    background: linear-gradient(135deg, rgba(234, 88, 12, 0.96), rgba(185, 28, 28, 0.98));
-    border: 1.5px solid #fbbf24;
-    color: #ffffff;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.15em;
-    padding: 14px 42px;
-    border-radius: 999px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 0 35px rgba(255, 107, 0, 0.8), 0 0 70px rgba(220, 38, 38, 0.5), 0 4px 20px rgba(0, 0, 0, 0.7);
-    margin-top: 14px;
-}
-
-.msot-enter-action-btn:hover {
-    transform: scale(1.07);
-    background: linear-gradient(135deg, #ff8c00, #dc2626);
-    box-shadow: 0 0 55px rgba(255, 140, 0, 1), 0 0 110px rgba(220, 38, 38, 0.9);
-    border-color: #ffffff;
 }
 
 /* ==========================================================================
-   7. TOP CYBERNETIC HUD CONTROLS BAR
-   ========================================================================= */
+   10. TOP HUD CONTROLS BAR
+   ========================================================================== */
 .msot-intro-hud-top {
     position: absolute;
     top: 24px;
@@ -497,7 +849,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    z-index: 35;
+    z-index: 45;
     pointer-events: auto;
 }
 
@@ -505,7 +857,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(14, 7, 8, 0.88);
+    background: rgba(16, 7, 10, 0.88);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(245, 158, 11, 0.5);
@@ -552,7 +904,7 @@
 .msot-intro-hud-btn {
     appearance: none;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(14, 8, 12, 0.85);
+    background: rgba(16, 8, 12, 0.85);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     color: #f8fafc;
@@ -571,7 +923,7 @@
 }
 
 .msot-intro-hud-btn:hover {
-    background: rgba(28, 14, 18, 0.95);
+    background: rgba(30, 14, 20, 0.95);
     border-color: rgba(245, 158, 11, 0.7);
     color: #fed7aa;
     transform: translateY(-1px);
@@ -610,7 +962,7 @@
 }
 
 /* ==========================================================================
-   8. SCANLINES, VIGNETTE & FILM OVERLAYS
+   11. SCANLINES & VIGNETTES
    ========================================================================== */
 .msot-intro-scanlines {
     position: absolute;
@@ -620,20 +972,20 @@
     background-size: 100% 4px, 6px 100%;
     pointer-events: none;
     z-index: 10;
-    opacity: 0.55;
+    opacity: 0.5;
 }
 
 .msot-intro-vignette {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, transparent 35%, rgba(2, 2, 4, 0.8) 75%, #020204 100%),
+    background: radial-gradient(circle at center, transparent 35%, rgba(2, 2, 4, 0.8) 75%, #000000 100%),
                 linear-gradient(to bottom, rgba(2, 2, 4, 0.75) 0%, transparent 18%, transparent 80%, rgba(2, 2, 4, 0.92) 100%);
     pointer-events: none;
     z-index: 11;
 }
 
 /* ==========================================================================
-   9. CINEMATIC PORTAL DISSOLVE & GATEWAY TRANSITION TO DASHBOARD
+   12. PORTAL TRANSITION OVERLAY
    ========================================================================== */
 .msot-transition-portal-overlay {
     position: fixed;
@@ -641,7 +993,7 @@
     width: 100vw;
     height: 100vh;
     z-index: 1000000;
-    background: radial-gradient(circle at center, rgba(234, 88, 12, 0.5) 0%, rgba(12, 4, 6, 0.98) 70%, #020204 100%);
+    background: radial-gradient(circle at center, rgba(234, 88, 12, 0.5) 0%, rgba(14, 4, 7, 0.98) 70%, #000000 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -740,21 +1092,30 @@
 }
 
 /* ==========================================================================
-   10. RESPONSIVE BREAKPOINTS (MOBILE & TABLET)
+   13. RESPONSIVE BREAKPOINTS (MOBILE & TABLET)
    ========================================================================== */
 @media (max-width: 768px) {
-    .msot-fire-website-title {
-        font-size: clamp(26px, 6vw, 36px);
+    .msot-sanskrit-inscription {
+        font-size: clamp(32px, 8vw, 48px);
+        letter-spacing: 0.06em;
+    }
+    .msot-sanskrit-sub {
+        font-size: 11px;
+        letter-spacing: 0.22em;
+    }
+    .msot-brand-title {
+        font-size: clamp(24px, 6vw, 38px);
         letter-spacing: 0.08em;
     }
-    .msot-enter-action-btn {
-        padding: 12px 28px;
-        font-size: 11px;
+    .msot-open-dashboard-btn {
+        padding: 13px 32px;
+        font-size: 12px;
+        letter-spacing: 0.12em;
     }
     .msot-volumetric-rays {
-        width: 700px;
-        height: 700px;
-        margin-top: -350px;
-        margin-left: -350px;
+        width: 750px;
+        height: 750px;
+        margin-top: -375px;
+        margin-left: -375px;
     }
 }

@@ -8,17 +8,17 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&family=Noto+Serif+JP:wght@600;700;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&family=Noto+Serif+JP:wght@600;700;900&family=Noto+Serif+Devanagari:wght@600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
     
     <!-- Stylesheets & Favicon (v=46 forces clean load across GitHub and Live Server) -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="css/main.css?v=47">
     <link rel="stylesheet" href="css/hero-gate.css?v=47">
-    <link rel="stylesheet" href="css/games.css?v=47">
+    <link rel="stylesheet" href="css/games.css?v=55">
     <link rel="stylesheet" href="css/auth.css?v=47">
     <link rel="stylesheet" href="css/dashboard.css?v=47">
     <link rel="stylesheet" href="css/faculty-flashcard.css?v=47">
-    <link rel="stylesheet" href="css/intro-video.css?v=47">
+    <link rel="stylesheet" href="css/intro-video.css?v=58">
     <link rel="stylesheet" href="css/beta.css?v=48">
     <link rel="stylesheet" href="css/study-tracker.css?v=48">
     <link rel="stylesheet" href="css/reward-store.css?v=48">
@@ -56,7 +56,7 @@
 <body data-user-role="STUDENT">
 
     <!-- ===================================================================
-         CINEMATIC INTRO VIDEO OVERLAY (ASUR GUARDIAN PROTOCOL CINEMA)
+         CINEMATIC GUARDIAN PROTOCOL INTRO — SACRED MASK SPLIT & SANSKRIT REVEAL
          =================================================================== -->
     <div id="msotIntroOverlay" class="msot-intro-overlay" role="dialog" aria-modal="true" aria-label="Mirai Academy Cinematic Intro">
         <!-- SVG Filter for Hyper-Realistic Optical Heat Distortion -->
@@ -71,13 +71,14 @@
             </defs>
         </svg>
 
-        <!-- Ambient Fiery Mask Blur Atmosphere (Synced Real-time Video Glow) -->
+        <!-- Ambient Fiery Blur Atmosphere -->
         <div class="msot-intro-ambient-bg">
             <video id="msotIntroAmbientVideo" class="msot-ambient-video-layer" playsinline muted loop preload="auto" aria-hidden="true">
                 <source src="assets/videos/asur.mp4" type="video/mp4">
                 <source src="assets/videos/asurbr.mp4" type="video/mp4">
             </video>
         </div>
+        <div class="msot-intro-crimson-backdrop"></div>
         <div class="msot-intro-scanlines"></div>
         <div class="msot-intro-vignette"></div>
         <div class="msot-intro-cinematic-glow"></div>
@@ -85,9 +86,9 @@
         <!-- Top HUD Controls Bar -->
         <div class="msot-intro-hud-top">
             <div class="msot-intro-hud-brand">
-                <img src="assets/images/asur.mp4.png" alt="Guardian Demon Mask" class="msot-intro-hud-mask-icon" onerror="this.src='assets/images/intro_mask.jpg'">
+                <img src="assets/images/intro_mask.jpg" alt="Guardian Mask" class="msot-intro-hud-mask-icon" onerror="this.src='assets/images/asur.mp4.png'">
                 <span class="msot-intro-hud-title">MIRAI ACADEMY</span>
-                <span class="msot-intro-hud-sub">ASUR PROTOCOL</span>
+                <span class="msot-intro-hud-sub">GUARDIAN PROTOCOL</span>
             </div>
             <div class="msot-intro-hud-actions">
                 <button type="button" id="msotIntroUnmuteBtn" class="msot-intro-hud-btn btn-unmute" onclick="window.msotIntroVideo && window.msotIntroVideo.toggleMute()">
@@ -104,52 +105,93 @@
             <!-- Volumetric Light Rays Radiating from Behind Mask -->
             <div class="msot-volumetric-rays" id="msotVolumetricRays"></div>
 
-            <!-- Atmospheric Floating Fire Embers Canvas Layer -->
+            <!-- Atmospheric Floating Fire Embers & Smoke Canvas Layer -->
             <canvas id="msotMaskCanvas" class="msot-mask-canvas-layer"></canvas>
 
-            <!-- LAYER 10: Fiery Orange Website Name & Dashboard Button (Underneath the Slider Gate) -->
-            <div class="msot-fire-text-reveal" id="msotFireTextReveal">
-                <div class="msot-fire-text-aura"></div>
-                <h1 class="msot-fire-website-title">MIRAI SCHOOL OF TECHNOLOGY</h1>
-                <button type="button" class="msot-enter-action-btn" onclick="window.msotIntroVideo && window.msotIntroVideo.enterDashboardWithTransition()">
-                    <span>ENTER CADET DASHBOARD ➔</span>
-                </button>
+            <!-- INNER SANCTUM WORLD: Sanskrit & Brand Reveals (Emerges Behind Parting Mask) -->
+            <div class="msot-inner-sanctum" id="msotInnerSanctum">
+                <!-- Shockwave Ring Effect (Fires at split instant) -->
+                <div class="msot-shockwave-ring" id="msotShockwaveRing"></div>
+
+                <!-- Fiery Backing Aura -->
+                <div class="msot-sanctum-fire-aura"></div>
+
+                <!-- REVEAL PHASE 1: SANSKRIT TEXT ("अंतः अस्ति प्रारंभ") -->
+                <div class="msot-sanskrit-container" id="msotSanskritContainer">
+                    <div class="msot-sanskrit-radiance"></div>
+                    <div class="msot-sanskrit-inscription" data-text="अंतः अस्ति प्रारंभ">
+                        <span class="sanskrit-char">अं</span><span class="sanskrit-char">तः</span>
+                        <span class="sanskrit-space">&nbsp;</span>
+                        <span class="sanskrit-char">अ</span><span class="sanskrit-char">स्ति</span>
+                        <span class="sanskrit-space">&nbsp;</span>
+                        <span class="sanskrit-char">प्रा</span><span class="sanskrit-char">रं</span><span class="sanskrit-char">भ</span>
+                    </div>
+                    <div class="msot-sanskrit-sub">END IS THE NEW BEGINNING</div>
+                    <div class="msot-sanskrit-ember-line"></div>
+                </div>
+
+                <!-- REVEAL PHASE 2: BRAND NAME & OPEN DASHBOARD BUTTON -->
+                <div class="msot-brand-container" id="msotBrandContainer">
+                    <div class="msot-brand-molten-aura"></div>
+                    <h1 class="msot-brand-title" data-text="MIRAI SCHOOL OF TECHNOLOGY">
+                        MIRAI SCHOOL OF TECHNOLOGY
+                    </h1>
+                    <div class="msot-brand-light-sweep"></div>
+
+                    <!-- ⚔ OPEN DASHBOARD ⚔ BUTTON -->
+                    <button type="button" class="msot-open-dashboard-btn" id="msotOpenDashboardBtn" onclick="window.msotIntroVideo && window.msotIntroVideo.enterDashboardWithTransition()">
+                        <span class="btn-fire-edge"></span>
+                        <span class="btn-text">⚔ OPEN DASHBOARD ⚔</span>
+                        <span class="btn-ambient-glow"></span>
+                    </button>
+                </div>
             </div>
 
-            <!-- LAYER 25: Central Mask & Slider Gate Layer (ON TOP OF TEXT) -->
-            <div class="msot-intro-mask-container" id="msotMaskContainer">
-                <!-- Video wrap playing slow-mo video during buildup -->
-                <div class="msot-mask-video-wrap" id="msotMaskVideoWrap">
-                    <video id="msotHeroVideo" class="msot-hero-mask-video" playsinline muted preload="auto" poster="assets/images/asur.mp4.png">
+            <!-- MASK VIEWPORT & SPLIT MECHANISM (Foreground) -->
+            <div class="msot-mask-viewport" id="msotMaskViewport">
+                <!-- Center Fissure Cracks Overlay (Ignites before splitting) -->
+                <div class="msot-crack-overlay" id="msotCrackOverlay">
+                    <div class="msot-crack-laser-line" id="msotCrackLaserLine"></div>
+                    <div class="msot-crack-branch left"></div>
+                    <div class="msot-crack-branch right"></div>
+                    <div class="msot-crack-burst-sparks"></div>
+                </div>
+
+                <!-- Split Left Mask Half -->
+                <div class="msot-mask-half left" id="msotMaskLeft">
+                    <div class="msot-mask-half-inner">
+                        <img src="assets/images/intro_mask.jpg" alt="Guardian Mask Left" class="msot-split-mask-img">
+                    </div>
+                    <div class="msot-split-molten-edge edge-left"></div>
+                </div>
+
+                <!-- Split Right Mask Half -->
+                <div class="msot-mask-half right" id="msotMaskRight">
+                    <div class="msot-mask-half-inner">
+                        <img src="assets/images/intro_mask.jpg" alt="Guardian Mask Right" class="msot-split-mask-img">
+                    </div>
+                    <div class="msot-split-molten-edge edge-right"></div>
+                </div>
+
+                <!-- Full Solid Mask (Plays slow-mo video approach 0-5s before crack) -->
+                <div class="msot-mask-solid" id="msotMaskSolid">
+                    <!-- Dynamic Backlight Corona Halo -->
+                    <div class="msot-mask-backlight-corona"></div>
+
+                    <!-- Hero Mask Video Layer -->
+                    <video id="msotHeroVideo" class="msot-hero-mask-video" playsinline muted preload="auto" poster="assets/images/intro_mask.jpg">
                         <source src="assets/videos/asur.mp4" type="video/mp4">
                         <source src="assets/videos/asurbr.mp4" type="video/mp4">
                     </video>
-                </div>
+                    <img src="assets/images/intro_mask.jpg" alt="Guardian Mask" class="msot-mask-fallback-img">
 
-                <!-- The Slider Gate (Top layer: splits from middle and slides left & right) -->
-                <div class="msot-mask-slider-gate" id="msotMaskGateDoors">
-                    <!-- Center Laser Crevice / Splitting Energy Seam -->
-                    <div class="msot-slider-center-seam" id="msotCenterCrevice"></div>
+                    <!-- Anamorphic Specular Sweep Beam -->
+                    <div class="msot-mask-specular-sweep"></div>
 
-                    <!-- Left Slider Door (Slides to the Left) -->
-                    <div class="msot-slider-door left" id="msotGateLeft">
-                        <div class="msot-slider-door-inner">
-                            <img src="assets/images/asur.mp4.png" alt="Mask Left Gate Door" class="msot-slider-mask-img">
-                        </div>
-                        <div class="msot-slider-door-edge edge-right"></div>
-                    </div>
-
-                    <!-- Right Slider Door (Slides to the Right) -->
-                    <div class="msot-slider-door right" id="msotGateRight">
-                        <div class="msot-slider-door-inner">
-                            <img src="assets/images/asur.mp4.png" alt="Mask Right Gate Door" class="msot-slider-mask-img">
-                        </div>
-                        <div class="msot-slider-door-edge edge-left"></div>
-                    </div>
                 </div>
             </div>
 
-            <!-- Dark Side Intro BGM Audio Track -->
+            <!-- Dark Ambient Intro BGM Audio Track -->
             <audio id="msotIntroBgmAudio" src="assets/audio/asur_dark_side_intro_bgm.mp3" preload="auto" loop></audio>
         </div>
 
@@ -157,7 +199,7 @@
         <div id="msotTransitionPortal" class="msot-transition-portal-overlay">
             <div class="msot-portal-content">
                 <div class="msot-portal-crest-glow">
-                    <img src="assets/images/asur.mp4.png" alt="Guardian Mask" onerror="this.src='assets/images/intro_mask.jpg'">
+                    <img src="assets/images/intro_mask.jpg" alt="Guardian Mask" onerror="this.src='assets/images/asur.mp4.png'">
                 </div>
                 <span class="msot-portal-text-kicker">⛩️ GUARDIAN PROTOCOL VERIFIED</span>
                 <h3 class="msot-portal-text-main">ENTERING CADET DASHBOARD</h3>
@@ -1849,7 +1891,7 @@
                     <div class="rs-odds-row"><span>Common Tier Rewards (Avatars, Guild Titles)</span><strong style="color:#cbd5e1;">45%</strong></div>
                     <div class="rs-odds-row"><span>Rare Tier Rewards (Neon Frames, Shields, Shinobi)</span><strong style="color:#38bdf8;">30%</strong></div>
                     <div class="rs-odds-row"><span>Epic Tier Rewards (Tokyo Gold, Samurai, Guild Banner)</span><strong style="color:#c084fc;">18%</strong></div>
-                    <div class="rs-odds-row"><span>Legendary Tier Rewards (Asur Ascendant, Kitsune)</span><strong style="color:#fbbf24;">7%</strong></div>
+                    <div class="rs-odds-row"><span>Legendary Tier Rewards (Ancient Ascendant, Kitsune)</span><strong style="color:#fbbf24;">7%</strong></div>
                 </div>
 
                 <button type="button" class="rs-btn-action rs-btn-buy" style="padding:10px 24px;" onclick="window.msotStore && window.msotStore.closeMysteryModal()">
@@ -2151,10 +2193,10 @@
     <script src="js/auth.js?v=47"></script>
     <script src="js/audio.js?v=47"></script>
     <script src="js/state.js?v=47"></script>
-    <script src="js/games-data.js?v=47"></script>
+    <script src="js/games-data.js?v=55"></script>
     <script src="js/three-viewport.js?v=47"></script>
     <script src="js/gate-canvas.js?v=47"></script>
-    <script src="js/game-engine.js?v=47"></script>
+    <script src="js/game-engine.js?v=55"></script>
     <script src="js/scroll-animations.js?v=47"></script>
     <script src="js/pixel-grid-trail.js?v=47"></script>
     <script src="js/guild.js?v=47"></script>
@@ -2163,7 +2205,7 @@
     <script src="js/react-league-module.js?v=47"></script>
     <script src="js/dashboard-service.js?v=47"></script>
     <script src="js/platform.js?v=47"></script>
-    <script src="js/intro-video.js?v=47"></script>
+    <script src="js/intro-video.js?v=58"></script>
     <script src="js/beta.js?v=48"></script>
     <script src="js/study-tracker.js?v=48"></script>
     <script src="js/reward-store.js?v=48"></script>
